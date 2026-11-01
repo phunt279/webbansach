@@ -1,0 +1,389 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quản lý danh mục - Admin PAT</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="admin.css" />
+  </head>
+  <body>
+    <div class="admin-layout">
+      <aside class="admin-sidebar">
+        <div class="admin-logo">
+          <a
+            href="admin-dashboard.html"
+            style="
+              text-decoration: none;
+              display: flex;
+              align-items: center;
+              gap: 10px;
+            "
+          >
+            <div
+              class="logo-icon"
+              style="width: 36px; height: 36px; font-size: 18px"
+            ></div>
+            <div>
+              <div class="logo-text" style="font-size: 18px">PAT</div>
+              <div
+                style="
+                  font-size: 10px;
+                  color: rgba(255, 255, 255, 0.4);
+                  letter-spacing: 1px;
+                "
+              >
+                ADMIN PANEL
+              </div>
+            </div>
+          </a>
+        </div>
+        <nav class="admin-nav">
+          <div class="admin-nav-section">Tổng quan</div>
+          <a href="admin-dashboard.html" class="admin-nav-item"
+            ><span class="admin-nav-icon"></span> Dashboard</a
+          >
+          <div class="admin-nav-section">Quản lý</div>
+          <a href="admin-books.html" class="admin-nav-item"
+            ><span class="admin-nav-icon"></span> Quản lý sách</a
+          >
+          <a href="categories.html" class="admin-nav-item active"
+            ><span class="admin-nav-icon"></span> Quản lý danh mục</a
+          >
+          <a href="admin-orders.html" class="admin-nav-item">
+            <span class="admin-nav-icon"></span> Quản lý đơn hàng</a
+          >
+          <a href="user.html" class="admin-nav-item"
+            ><span class="admin-nav-icon"></span> Quản lý tài khoản</a
+          >
+          <div class="admin-nav-section">Hệ thống</div>
+          <a href="index.html" class="admin-nav-item"
+            ><span class="admin-nav-icon"></span> Về trang chủ</a
+          >
+          <button
+            class="admin-nav-item"
+            onclick="Auth.logout()"
+            style="color: #ff6b6b"
+          >
+            <span class="admin-nav-icon"></span> Đăng xuất
+          </button>
+        </nav>
+        <div class="admin-user-footer">
+          <div class="admin-user-avatar">A</div>
+          <div class="admin-user-info">
+            <div class="name">Admin</div>
+            <div class="role">Quản trị viên</div>
+          </div>
+        </div>
+      </aside>
+
+      <main class="admin-content">
+        <div class="admin-header">
+          <div class="admin-page-title">Quản lý danh mục</div>
+          <button
+            class="btn-primary"
+            style="padding: 10px 20px; font-size: 13px"
+            onclick="openCatModal()"
+          >
+            + Thêm danh mục
+          </button>
+        </div>
+
+        <div
+          style="
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 24px;
+            align-items: start;
+          "
+        >
+          <div>
+            <div class="admin-card" style="margin-bottom: 16px">
+              <div class="admin-card-header">
+                <div class="admin-card-title">Thống kê danh mục</div>
+              </div>
+              <div
+                style="
+                  padding: 16px;
+                  display: flex;
+                  flex-direction: column;
+                  gap: 12px;
+                "
+                id="catStats"
+              >
+                <div
+                  style="
+                    text-align: center;
+                    color: var(--ink-muted);
+                    padding: 20px;
+                  "
+                >
+                  Đang tải...
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="admin-card">
+            <div class="admin-card-header">
+              <div class="admin-card-title">
+                Danh sách danh mục (<span id="catCount">0</span>)
+              </div>
+              <input
+                type="text"
+                class="search-admin"
+                placeholder="Tìm kiếm..."
+                id="searchCats"
+                oninput="filterCats()"
+              />
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>#ID</th>
+                    <th>Icon</th>
+                    <th>Tên danh mục</th>
+                    <th>Mô tả</th>
+                    <th>Số sách</th>
+                    <th>Thao tác</th>
+                  </tr>
+                </thead>
+                <tbody id="catsTableBody">
+                  <tr>
+                    <td
+                      colspan="6"
+                      style="
+                        text-align: center;
+                        padding: 40px;
+                        color: var(--ink-muted);
+                      "
+                    >
+                      Đang tải...
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <div class="modal-overlay hidden" id="catModal">
+      <div class="modal">
+        <div class="modal-header">
+          <div class="modal-title" id="catModalTitle">Thêm danh mục</div>
+          <button class="modal-close" onclick="adminModal('catModal', false)">
+            ✕
+          </button>
+        </div>
+        <div class="modal-body">
+          <input type="hidden" id="catId" />
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Tên danh mục *</label>
+              <input
+                type="text"
+                class="form-input"
+                id="catName"
+                placeholder="Văn học"
+              />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Icon (emoji)</label>
+              <input
+                type="text"
+                class="form-input"
+                id="catIcon"
+                placeholder=""
+              />
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Mô tả</label>
+            <input
+              type="text"
+              class="form-input"
+              id="catDesc"
+              placeholder="Mô tả ngắn về danh mục"
+            />
+          </div>
+          <div style="display: flex; gap: 12px; margin-top: 8px">
+            <button class="form-submit" onclick="saveCat()" style="flex: 1">
+              Lưu
+            </button>
+            <button
+              class="btn-secondary"
+              onclick="adminModal('catModal', false)"
+              style="flex: 1; color: var(--ink); border-color: var(--border)"
+            >
+              Hủy
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="main.js"></script>
+    <script src="admin.js"></script>
+    <script>
+      let allCats = [];
+      let allBooks = [];
+
+      async function loadCats() {
+        if (!AdminAuth.check()) return;
+        const user = Auth.getUser();
+        document.querySelector(".admin-user-avatar").textContent = user.name
+          .charAt(0)
+          .toUpperCase();
+        document.querySelector(".admin-user-info .name").textContent =
+          user.name;
+
+        try {
+          [allCats, allBooks] = await Promise.all([
+            api.get("/categories"),
+            api.get("/books"),
+          ]);
+          document.getElementById("catCount").textContent = allCats.length;
+          renderCats(allCats);
+
+          document.getElementById("catStats").innerHTML = allCats
+            .map((c) => {
+              const count = allBooks.filter(
+                (b) => String(b.categoryId) === String(c.id),
+              ).length;
+              const pct = allBooks.length
+                ? Math.round((count / allBooks.length) * 100)
+                : 0;
+              return `
+              <div>
+                <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+                  <span style="font-size:13px;font-weight:600">${c.icon} ${c.name}</span>
+                  <span style="font-size:12px;color:var(--ink-muted)">${count} sách</span>
+                </div>
+                <div style="height:6px;background:var(--border);border-radius:3px">
+                  <div style="height:100%;width:${pct}%;background:var(--amber);border-radius:3px;transition:width 0.5s ease"></div>
+                </div>
+              </div>`;
+            })
+            .join("");
+        } catch {
+          Toast.show("Không thể tải dữ liệu", "error");
+        }
+      }
+
+      function renderCats(cats) {
+        const body = document.getElementById("catsTableBody");
+        if (!cats.length) {
+          body.innerHTML =
+            '<tr><td colspan="6" style="text-align:center;padding:40px;color:var(--ink-muted)">Không có danh mục</td></tr>';
+          return;
+        }
+        body.innerHTML = cats
+          .map((c) => {
+            const count = allBooks.filter(
+              (b) => String(b.categoryId) === String(c.id),
+            ).length;
+
+            return `<tr>
+            <td><strong>#${c.id}</strong></td>
+            <td style="font-size:24px;text-align:center">${c.icon}</td>
+            <td><strong>${c.name}</strong></td>
+            <td style="color:var(--ink-muted)">${c.description || "—"}</td>
+            <td><span style="background:var(--amber-pale);color:var(--amber);padding:3px 10px;border-radius:50px;font-size:12px;font-weight:600">${count} sách</span></td>
+            <td>
+              <div style="display:flex;gap:6px">
+                <button class="icon-btn" onclick="editCat('${
+                  c.id
+                }')">✏️</button>
+                <button class="icon-btn danger" onclick="deleteCat('${
+                  c.id
+                }')">🗑️</button>
+              </div>
+            </td>
+          </tr>`;
+          })
+          .join("");
+      }
+
+      function filterCats() {
+        const q = document.getElementById("searchCats").value.toLowerCase();
+        renderCats(allCats.filter((c) => c.name.toLowerCase().includes(q)));
+      }
+
+      function openCatModal() {
+        document.getElementById("catId").value = "";
+        document.getElementById("catName").value = "";
+        document.getElementById("catIcon").value = "";
+        document.getElementById("catDesc").value = "";
+        document.getElementById("catModalTitle").textContent = "Thêm danh mục";
+        adminModal("catModal", true);
+      }
+
+      function editCat(id) {
+        const c = allCats.find((x) => String(x.id) === String(id));
+        if (!c) return;
+        document.getElementById("catId").value = c.id;
+        document.getElementById("catName").value = c.name;
+        document.getElementById("catIcon").value = c.icon;
+        document.getElementById("catDesc").value = c.description || "";
+        document.getElementById("catModalTitle").textContent = "Sửa danh mục";
+        adminModal("catModal", true);
+      }
+
+      async function saveCat() {
+        const id = document.getElementById("catId").value;
+        const name = document.getElementById("catName").value.trim();
+        if (!name) return Toast.show("Vui lòng nhập tên danh mục", "error");
+        const data = {
+          name,
+          icon: document.getElementById("catIcon").value.trim() || "📚",
+          description: document.getElementById("catDesc").value.trim(),
+        };
+        try {
+          if (id) {
+            await api.put(`/categories/${id}`, { id: id, ...data });
+            Toast.show("Cập nhật danh mục thành công! ", "success");
+          } else {
+            await api.post("/categories", data);
+            Toast.show("Thêm danh mục thành công! ", "success");
+          }
+          adminModal("catModal", false);
+          loadCats();
+        } catch {
+          Toast.show("Lỗi lưu dữ liệu", "error");
+        }
+      }
+
+      async function deleteCat(id) {
+        const c = allCats.find((x) => String(x.id) === String(id));
+        const count = allBooks.filter(
+          (b) => String(b.categoryId) === String(id),
+        ).length;
+        if (count > 0)
+          return Toast.show(
+            `Không thể xóa! Danh mục có ${count} sách.`,
+            "error",
+          );
+        if (!confirmDelete(`Xóa danh mục "${c?.name}"?`)) return;
+        try {
+          await api.delete(`/categories/${id}`);
+          Toast.show("Đã xóa danh mục!", "success");
+          loadCats();
+        } catch {
+          Toast.show("Lỗi xóa dữ liệu", "error");
+        }
+      }
+
+      document.addEventListener("DOMContentLoaded", () => {
+        document.getElementById("catModal").addEventListener("click", (e) => {
+          if (e.target === document.getElementById("catModal"))
+            adminModal("catModal", false);
+        });
+      });
+
+      loadCats();
+    </script>
+  </body>
+</html>

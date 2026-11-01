@@ -1,0 +1,348 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chi tiết sách - PAT</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header>
+      <div class="header-top">Sách là kho tàng tri thức</div>
+      <div class="header-main">
+        <a href="index.html" class="logo"
+          ><div>
+            <div class="logo-text">PAT</div>
+            <span class="logo-sub">Nhà sách trực tuyến</span>
+          </div>
+        </a>
+        <form class="search-bar" id="searchForm">
+          <input type="text" id="searchInput" placeholder="Tìm kiếm sách..." />
+          <button type="submit"></button>
+        </form>
+        <div class="header-actions">
+          <a href="profile.html" class="header-btn" id="authBtn"
+            ><span class="icon"></span><span class="label">Tài khoản</span></a
+          >
+          <a
+            href="index.html"
+            class="header-btn"
+            id="adminBtn"
+            style="display: none"
+            ><span class="icon"></span><span class="label">Admin</span></a
+          >
+          <button class="header-btn" onclick="openCartSidebar()">
+            <span class="icon"></span><span class="label">Giỏ hàng</span
+            ><span class="cart-badge" style="display: none">0</span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <nav>
+      <div class="nav-inner" id="mainNav"></div>
+    </nav>
+
+    <div class="page-header">
+      <div class="page-header-inner">
+        <div class="breadcrumb">
+          <a href="index.html">Trang chủ</a> > <a href="books.html">Sách</a> >
+          <span id="breadcrumbTitle">Chi tiết sách</span>
+        </div>
+      </div>
+    </div>
+
+    <div id="loadingState" class="loading"><div class="spinner"></div></div>
+    <div id="productDetail" class="hidden">
+      <div class="product-detail">
+        <div class="product-img-wrap">
+          <img src="" alt="" class="product-img-main" id="productImg" />
+          <div
+            style="display: flex; gap: 10px; margin-top: 16px; flex-wrap: wrap"
+          >
+            <div
+              style="
+                flex: 1;
+                background: var(--cream);
+                border: 1px solid var(--border);
+                border-radius: 8px;
+                padding: 12px;
+                text-align: center;
+              "
+            >
+              <div style="font-size: 22px; margin-bottom: 4px"></div>
+              <div style="font-size: 12px; color: var(--ink-muted)">
+                Giao hàng<br />toàn quốc
+              </div>
+            </div>
+            <div
+              style="
+                flex: 1;
+                background: var(--cream);
+                border: 1px solid var(--border);
+                border-radius: 8px;
+                padding: 12px;
+                text-align: center;
+              "
+            >
+              <div style="font-size: 22px; margin-bottom: 4px">🔄</div>
+              <div style="font-size: 12px; color: var(--ink-muted)">
+                Đổi trả<br />30 ngày
+              </div>
+            </div>
+            <div
+              style="
+                flex: 1;
+                background: var(--cream);
+                border: 1px solid var(--border);
+                border-radius: 8px;
+                padding: 12px;
+                text-align: center;
+              "
+            >
+              <div style="font-size: 22px; margin-bottom: 4px">✅</div>
+              <div style="font-size: 12px; color: var(--ink-muted)">
+                Sách<br />chính hãng
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="product-info">
+          <div class="product-category-tag" id="productCat">—</div>
+          <h1 class="product-title" id="productTitle">—</h1>
+          <div class="product-author" id="productAuthor">—</div>
+          <div class="book-rating" style="margin-bottom: 20px">
+            <span class="stars" id="productStars">★★★★★</span>
+            <span class="rating-count" id="productReviews">(0 đánh giá)</span>
+            <span
+              style="color: var(--sage); margin-left: 8px; font-size: 13px"
+              id="productStock"
+              >—</span
+            >
+          </div>
+
+          <div class="product-price-block">
+            <span class="product-price-current" id="productPrice">—</span>
+            <span
+              class="product-price-original"
+              id="productOriginal"
+              style="display: none"
+              >—</span
+            >
+            <span
+              class="product-price-save"
+              id="productSave"
+              style="display: none"
+              >—</span
+            >
+          </div>
+
+          <p class="product-desc" id="productDesc">—</p>
+
+          <div
+            style="
+              display: flex;
+              align-items: center;
+              gap: 12px;
+              margin-bottom: 24px;
+            "
+          >
+            <span style="font-weight: 600; font-size: 14px">Số lượng:</span>
+            <div class="qty-control">
+              <button class="qty-btn" onclick="changeDetailQty(-1)">-</button>
+              <span class="qty-num" id="detailQty">1</span>
+              <button class="qty-btn" onclick="changeDetailQty(1)">+</button>
+            </div>
+          </div>
+
+          <div class="product-actions">
+            <button class="btn-cart" onclick="addDetailToCart()">
+              Thêm vào giỏ hàng
+            </button>
+            <a
+              href="checkout.html"
+              class="btn-primary"
+              onclick="addDetailToCart()"
+              style="padding: 16px 24px"
+              >Mua ngay</a
+            >
+          </div>
+
+          <div
+            style="
+              margin-top: 24px;
+              padding: 16px;
+              background: var(--amber-pale);
+              border-radius: 8px;
+              border: 1px solid rgba(200, 133, 42, 0.2);
+            "
+          >
+            <div
+              style="
+                font-size: 13px;
+                color: var(--ink-muted);
+                margin-bottom: 8px;
+                font-weight: 600;
+              "
+            >
+              THÔNG TIN CHI TIẾT
+            </div>
+            <div
+              style="
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 8px;
+                font-size: 14px;
+              "
+              id="productMeta"
+            ></div>
+          </div>
+        </div>
+      </div>
+
+      <section class="section" style="border-top: 1px solid var(--border)">
+        <div class="section-inner">
+          <div class="section-header">
+            <div class="section-title">Sách <span>liên quan</span></div>
+          </div>
+          <div class="books-grid" id="relatedBooksGrid"></div>
+        </div>
+      </section>
+    </div>
+
+    <div class="cart-overlay hidden" id="cartOverlay">
+      <div class="cart-sidebar" id="cartSidebar">
+        <div class="cart-header">
+          <div class="cart-title">Giỏ hàng</div>
+          <button class="modal-close" onclick="closeCartSidebar()">✕</button>
+        </div>
+        <div class="cart-items"></div>
+        <div class="cart-footer hidden">
+          <div class="cart-total">
+            <span class="cart-total-label">Tổng cộng</span>
+            <span class="cart-total-amount">0₫</span>
+          </div>
+          <a
+            href="checkout.html"
+            class="btn-primary"
+            style="width: 100%; justify-content: center"
+            >Thanh toán ngay →</a
+          >
+        </div>
+      </div>
+    </div>
+
+    <script src="main.js"></script>
+    <script>
+      let currentBook = null;
+      let detailQty = 1;
+
+      function changeDetailQty(delta) {
+        detailQty = Math.max(1, Math.min(99, detailQty + delta));
+        document.getElementById("detailQty").textContent = detailQty;
+      }
+
+      function addDetailToCart() {
+        if (currentBook) {
+          Cart.add(currentBook, detailQty);
+          renderCartSidebar();
+          openCartSidebar();
+        }
+      }
+
+      async function loadProduct() {
+        const id = new URLSearchParams(window.location.search).get("id");
+        if (!id) {
+          window.location.href = "books.html";
+          return;
+        }
+
+        try {
+          const [book, cats, allBooks] = await Promise.all([
+            api.get(`/books/${id}`),
+            api.get("/categories"),
+            api.get("/books"),
+          ]);
+
+          currentBook = book;
+          booksCache = allBooks;
+          catsCache = cats;
+
+          const cat = cats.find(
+            (c) => String(c.id) === String(book.categoryId),
+          );
+
+          document.title = `${book.title} - BookHaven`;
+          document.getElementById("breadcrumbTitle").textContent = book.title;
+          document.getElementById("productImg").src = book.image;
+          document.getElementById("productImg").alt = book.title;
+          document.getElementById("productImg").onerror = function () {
+            this.src = "https://via.placeholder.com/380x507?text=📚";
+          };
+          document.getElementById("productCat").textContent = cat
+            ? `${cat.icon} ${cat.name}`
+            : "";
+          document.getElementById("productTitle").textContent = book.title;
+          document.getElementById("productAuthor").textContent =
+            `Tác giả: ${book.author}`;
+          document.getElementById("productStars").textContent = fmt.stars(
+            book.rating || 4.5,
+          );
+          document.getElementById("productReviews").textContent = `(${
+            book.reviews || 0
+          } đánh giá)`;
+          document.getElementById("productStock").textContent =
+            book.stock > 0 ? ` Còn ${book.stock} cuốn` : " Hết hàng";
+          document.getElementById("productPrice").textContent = fmt.price(
+            book.price,
+          );
+          document.getElementById("productDesc").textContent = book.description;
+
+          if (book.originalPrice && book.originalPrice > book.price) {
+            document.getElementById("productOriginal").style.display = "inline";
+            document.getElementById("productOriginal").textContent = fmt.price(
+              book.originalPrice,
+            );
+            document.getElementById("productSave").style.display = "inline";
+            document.getElementById("productSave").textContent =
+              `-${fmt.discount(book.originalPrice, book.price)}`;
+          }
+
+          document.getElementById("productMeta").innerHTML = `
+            <div><span style="color:var(--ink-muted)">Thể loại:</span> ${
+              cat ? cat.name : "—"
+            }</div>
+            <div><span style="color:var(--ink-muted)">Tác giả:</span> ${
+              book.author
+            }</div>
+            <div><span style="color:var(--ink-muted)">Đánh giá:</span> ${
+              book.rating
+            }/5</div>
+            <div><span style="color:var(--ink-muted)">Tồn kho:</span> ${
+              book.stock
+            }</div>
+          `;
+
+          document.getElementById("loadingState").classList.add("hidden");
+          document.getElementById("productDetail").classList.remove("hidden");
+
+          const related = allBooks
+            .filter(
+              (b) =>
+                String(b.id) !== String(book.id) &&
+                String(b.categoryId) === String(book.categoryId),
+            )
+            .slice(0, 4);
+          document.getElementById("relatedBooksGrid").innerHTML = related.length
+            ? related.map((b) => renderBookCard(b, cats)).join("")
+            : '<p style="color:var(--ink-muted)">Không có sách liên quan</p>';
+        } catch (e) {
+          Toast.show("Không thể tải sách. Hãy chạy json-server!", "error");
+        }
+      }
+
+      loadProduct();
+    </script>
+  </body>
+</html>

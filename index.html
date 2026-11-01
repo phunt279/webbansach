@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PAT - Nhà Sách Trực Tuyến</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header>
+      <div class="header-top">Sách là kho tàng tri thức</div>
+      <div class="header-main">
+        <a href="index.html" class="logo">
+          <div>
+            <div class="logo-text">PAT</div>
+            <span class="logo-sub">Nhà sách trực tuyến</span>
+          </div>
+        </a>
+        <form class="search-bar" id="searchForm">
+          <input type="text" id="searchInput" placeholder="Tìm kiếm sách" />
+          <button type="submit">🔍</button>
+        </form>
+        <div class="header-actions">
+          <a
+            href="admin-dashboard.html"
+            class="header-btn"
+            id="adminBtn"
+            style="display: none"
+          >
+            <span class="icon"></span>
+            <span class="label">Admin</span>
+          </a>
+          <button class="header-btn" onclick="openCartSidebar()">
+            <span class="icon"></span>
+            <span class="label">Giỏ hàng</span>
+            <span class="cart-badge" style="display: none">0</span>
+          </button>
+        </div>
+      </div>
+    </header>
+    <nav>
+      <div class="nav-inner" id="mainNav"></div>
+    </nav>
+
+    <section class="hero">
+      <div class="hero-inner">
+        <div class="hero-text">
+          <div class="hero-badge">Bộ sưu tập mới 2026</div>
+          <h1>Mỗi cuốn sách là<br />một <em>hành trình</em><br />mới</h1>
+          <p>
+            Khám phá hàng nghìn đầu sách chất lượng từ khắp nơi trên thế giới.
+            Từ văn học cổ điển đến sách phát triển bản thân hiện đại.
+          </p>
+          <div class="hero-cta">
+            <a href="books.html" class="btn-primary"> Khám phá ngay</a>
+            <a href="books.html?sale=true" class="btn-secondary"
+              >Xem khuyến mãi</a
+            >
+          </div>
+          <div class="hero-stats">
+            <div class="hero-stat">
+              <div class="num" id="totalBooks">8+</div>
+              <div class="desc">Đầu sách</div>
+            </div>
+            <div class="hero-stat">
+              <div class="num">5★</div>
+              <div class="desc">Chất lượng</div>
+            </div>
+            <div class="hero-stat">
+              <div class="num">24h</div>
+              <div class="desc">Giao hàng</div>
+            </div>
+          </div>
+        </div>
+        <div class="hero-books" id="heroBooksGrid"></div>
+      </div>
+    </section>
+
+    <section class="section" style="background: var(--warm-white)">
+      <div class="section-inner">
+        <div class="section-header">
+          <div>
+            <div class="section-title">Thể loại <span>nổi bật</span></div>
+
+            <div class="section-subtitle">Tìm cuốn sách phù hợp với bạn</div>
+          </div>
+          <a href="books.html" class="view-all">Xem tất cả →</a>
+        </div>
+        <div class="categories-grid" id="categoriesGrid">
+          <div class="loading"><div class="spinner"></div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-inner">
+        <div class="section-header">
+          <div>
+            <div class="section-title">Sách <span>nổi bật</span></div>
+            <div class="section-subtitle">Được độc giả yêu thích nhất</div>
+          </div>
+          <a href="books.html" class="view-all">Xem tất cả →</a>
+        </div>
+        <div class="books-grid" id="featuredBooksGrid">
+          <div class="loading"><div class="spinner"></div></div>
+        </div>
+      </div>
+    </section>
+
+    <div class="banner-section">
+      <h2>Giảm lên đến 20% hôm nay!</h2>
+      <p>Hàng trăm đầu sách khuyến mãi đang chờ bạn khám phá</p>
+      <a
+        href="books.html?sale=true"
+        class="btn-primary"
+        style="background: white; color: var(--amber)"
+        >Mua ngay</a
+      >
+    </div>
+
+    <section class="section">
+      <div class="section-inner">
+        <div class="section-header">
+          <div>
+            <div class="section-title">Tất cả <span>sách</span></div>
+            <div class="section-subtitle">Kho sách phong phú đang chờ bạn</div>
+          </div>
+          <a href="books.html" class="view-all">Xem tất cả →</a>
+        </div>
+        <div class="books-grid" id="allBooksGrid">
+          <div class="loading"><div class="spinner"></div></div>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <div class="footer-inner">
+        <div class="footer-brand">
+          <div class="logo">
+            <div class="logo-text">PAT</div>
+          </div>
+          <p>
+            Chúng tôi mang đến những cuốn sách chất lượng nhất, giúp bạn mở rộng
+            kiến thức và khám phá thế giới qua từng trang sách.
+          </p>
+        </div>
+        <div class="footer-col">
+          <h4>Thể loại</h4>
+          <ul>
+            <li><a href="books.html?cat=1">Văn học</a></li>
+            <li><a href="books.html?cat=2">Kỹ năng sống</a></li>
+            <li><a href="books.html?cat=3">Lịch sử</a></li>
+            <li><a href="books.html?cat=4">Kinh tế</a></li>
+            <li><a href="books.html?cat=5">Khoa học</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Hỗ trợ</h4>
+          <ul>
+            <li><a href="#">Hướng dẫn mua hàng</a></li>
+            <li><a href="#">Chính sách đổi trả</a></li>
+            <li><a href="#">Vận chuyển</a></li>
+            <li><a href="#">Liên hệ</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Liên hệ</h4>
+          <ul>
+            <li><a>Hà Nội</a></li>
+            <li><a>0969129615</a></li>
+            <li><a>PAT@gmail.com</a></li>
+            <li><a>8:00 - 21:00 hàng ngày</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 PAT. Bản quyền thuộc về PAT.</span>
+        <span>Made in Vietnam</span>
+      </div>
+    </footer>
+
+    <div class="cart-overlay hidden" id="cartOverlay">
+      <div class="cart-sidebar" id="cartSidebar">
+        <div class="cart-header">
+          <div class="cart-title">Giỏ hàng</div>
+          <button class="modal-close" onclick="closeCartSidebar()">✕</button>
+        </div>
+        <div class="cart-items"></div>
+        <div class="cart-footer hidden">
+          <div class="cart-total">
+            <span class="cart-total-label">Tổng cộng</span>
+            <span class="cart-total-amount">0₫</span>
+          </div>
+          <a
+            href="checkout.html"
+            class="btn-primary"
+            style="width: 100%; justify-content: center"
+            >Thanh toán ngay →</a
+          >
+        </div>
+      </div>
+    </div>
+    <div class="modal-overlay hidden" id="loginModal">
+      <div class="modal">
+        <div class="modal-header">
+          <div class="modal-title">Đăng nhập</div>
+          <button class="modal-close" onclick="closeModal('loginModal')">
+            ✕
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label class="form-label">Email</label>
+            <input
+              type="email"
+              class="form-input"
+              id="loginEmail"
+              placeholder="your@email.com"
+            />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Mật khẩu</label>
+            <input
+              type="password"
+              class="form-input"
+              id="loginPassword"
+              placeholder="••••••••"
+            />
+          </div>
+          <button class="form-submit" onclick="doLogin()">Đăng nhập</button>
+          <div class="form-footer">
+            Chưa có tài khoản? <a onclick="switchToRegister()">Đăng ký ngay</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-overlay hidden" id="registerModal">
+      <div class="modal">
+        <div class="modal-header">
+          <div class="modal-title">Đăng ký tài khoản</div>
+          <button class="modal-close" onclick="closeModal('registerModal')">
+            ✕
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label class="form-label">Họ và tên</label>
+            <input
+              type="text"
+              class="form-input"
+              id="regName"
+              placeholder="Nguyễn Văn A"
+            />
+            <span class="form-error" id="errName"></span>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Email</label>
+            <input
+              type="email"
+              class="form-input"
+              id="regEmail"
+              placeholder="your@email.com"
+            />
+            <span class="form-error" id="errEmail"></span>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Số điện thoại</label>
+            <input
+              type="tel"
+              class="form-input"
+              id="regPhone"
+              placeholder="0123 456 789"
+            />
+            <span class="form-error" id="errPhone"></span>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Mật khẩu</label>
+            <input
+              type="password"
+              class="form-input"
+              id="regPassword"
+              placeholder="••••••••"
+            />
+            <span class="form-error" id="errPassword"></span>
+          </div>
+          <button class="form-submit" onclick="doRegister()">Đăng ký</button>
+          <div class="form-footer">
+            Đã có tài khoản? <a onclick="switchToLogin()">Đăng nhập</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-overlay hidden" id="quickViewModal">
+      <div class="modal" style="max-width: 640px">
+        <div class="modal-header">
+          <div class="modal-title">Xem nhanh</div>
+          <button class="modal-close" onclick="closeModal('quickViewModal')">
+            ✕
+          </button>
+        </div>
+        <div class="modal-body" id="quickViewBody">
+          <div class="loading"><div class="spinner"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <script src="main.js"></script>
+    <script>
+      async function loadHome() {
+        try {
+          const [books, cats] = await Promise.all([
+            api.get("/books"),
+            api.get("/categories"),
+          ]);
+          booksCache = books;
+          catsCache = cats;
+
+          // Hero books
+          const heroGrid = document.getElementById("heroBooksGrid");
+          heroGrid.innerHTML = books
+            .slice(0, 3)
+            .map(
+              (b) => `
+  <a href="product.html?id=${b.id}" class="hero-book-card">
+    <img src="${b.image}" alt="${b.title}" 
+         style="width:100%;aspect-ratio:3/4;object-fit:cover;border-radius:10px"
+         onerror="this.style.display='none'">
+  </a>`
+            )
+            .join("");
+
+          // Total count
+          document.getElementById("totalBooks").textContent =
+            books.length + "+";
+
+          // Categories
+          document.getElementById("categoriesGrid").innerHTML = cats
+            .map(
+              (cat) => `
+          <a href="books.html?cat=${cat.id}" class="category-card">
+            <div class="category-icon">${cat.icon}</div>
+              <div class="category-name">${cat.name}</div>
+          <div class="category-desc">${cat.description}</div>
+       </a>`
+            )
+            .join("");
+
+          // Featured
+          const featured = books.filter((b) => b.featured);
+          document.getElementById("featuredBooksGrid").innerHTML = featured
+            .map((b) => renderBookCard(b, cats))
+            .join("");
+
+          // All
+          document.getElementById("allBooksGrid").innerHTML = books
+            .map((b) => renderBookCard(b, cats))
+            .join("");
+        } catch (e) {
+          console.error(e);
+          Toast.show(
+            "Không thể kết nối máy chủ. Hãy chạy json-server!",
+            "error"
+          );
+        }
+      }
+
+      async function doLogin() {
+        const email = document
+          .getElementById("loginEmail")
+          .value.trim()
+          .toLowerCase();
+        const pwd = document.getElementById("loginPassword").value.trim();
+
+        if (!email || !pwd)
+          return Toast.show("Vui lòng điền đầy đủ thông tin", "error");
+
+        try {
+          // Lấy toàn bộ người dùng về để lọc bằng JS (chắc chắn đúng 100%)
+          const allUsers = await api.get("/users");
+
+          const user = allUsers.find(
+            (u) => (u.email || "").toLowerCase() === email && u.password === pwd
+          );
+
+          if (!user)
+            return Toast.show("Email hoặc mật khẩu không đúng", "error");
+
+          Auth.setUser(user);
+          closeModal("loginModal");
+          renderHeader();
+          Toast.show(`Chào mừng ${user.name}! `, "success");
+
+          if (user.role === "admin") {
+            setTimeout(() => {
+              window.location.href = "admin-orders.html"; // Chuyển đúng về trang admin
+            }, 1000);
+          }
+        } catch (e) {
+          Toast.show("Lỗi kết nối", "error");
+        }
+      }
+
+      async function doRegister() {
+        const name = document.getElementById("regName").value.trim();
+        const email = document
+          .getElementById("regEmail")
+          .value.trim()
+          .toLowerCase();
+        const phone = document.getElementById("regPhone").value.trim();
+        const password = document.getElementById("regPassword").value.trim();
+
+        // Xóa lỗi cũ
+        ["errName", "errEmail", "errPhone", "errPassword"].forEach(
+          (id) => (document.getElementById(id).textContent = "")
+        );
+
+        let hasError = false;
+        if (!name) {
+          document.getElementById("errName").textContent =
+            " Vui lòng nhập họ và tên";
+          hasError = true;
+        }
+        if (!email) {
+          document.getElementById("errEmail").textContent =
+            " Vui lòng nhập email";
+          hasError = true;
+        } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+          document.getElementById("errEmail").textContent =
+            " Email không hợp lệ";
+          hasError = true;
+        }
+        if (!phone) {
+          document.getElementById("errPhone").textContent =
+            " Vui lòng nhập số điện thoại";
+          hasError = true;
+        } else if (!/^[0-9]{10}$/.test(phone)) {
+          document.getElementById("errPhone").textContent =
+            " SĐT phải đúng 10 chữ số";
+          hasError = true;
+        }
+        if (!password) {
+          document.getElementById("errPassword").textContent =
+            " Vui lòng nhập mật khẩu";
+          hasError = true;
+        } else if (password.length < 6) {
+          document.getElementById("errPassword").textContent =
+            " Mật khẩu ít nhất 6 ký tự";
+          hasError = true;
+        }
+        if (hasError) return;
+
+        try {
+          // Lấy toàn bộ người dùng về để kiểm tra trùng email
+          const allUsers = await api.get("/users");
+          const isExist = allUsers.some(
+            (u) => (u.email || "").toLowerCase() === email
+          );
+
+          if (isExist) return Toast.show("Email đã được sử dụng", "error");
+
+          const newUser = await api.post("/users", {
+            name,
+            email,
+            phone,
+            password,
+            role: "user",
+            address: "",
+            createdAt: new Date().toISOString().split("T")[0],
+          });
+
+          Auth.setUser(newUser);
+          closeModal("registerModal");
+          renderHeader();
+          Toast.show(`Đăng ký thành công! Chào ${name} `, "success");
+        } catch (e) {
+          Toast.show("Lỗi kết nối", "error");
+        }
+      }
+
+      function switchToRegister() {
+        closeModal("loginModal");
+        openModal("registerModal");
+      }
+
+      function switchToLogin() {
+        closeModal("registerModal");
+        openModal("loginModal");
+      }
+
+      loadHome();
+    </script>
+  </body>
+</html>

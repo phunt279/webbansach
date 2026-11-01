@@ -1,0 +1,400 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quản lý tài khoản - Admin PAT</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="admin.css" />
+  </head>
+  <body>
+    <div class="admin-layout">
+      <aside class="admin-sidebar">
+        <div class="admin-logo">
+          <a
+            href="admin-dashboard.html"
+            style="
+              text-decoration: none;
+              display: flex;
+              align-items: center;
+              gap: 10px;
+            "
+          >
+            <div
+              class="logo-icon"
+              style="width: 36px; height: 36px; font-size: 18px"
+            ></div>
+            <div>
+              <div class="logo-text" style="font-size: 18px">BookHaven</div>
+              <div
+                style="
+                  font-size: 10px;
+                  color: rgba(255, 255, 255, 0.4);
+                  letter-spacing: 1px;
+                "
+              >
+                ADMIN PANEL
+              </div>
+            </div>
+          </a>
+        </div>
+        <nav class="admin-nav">
+          <div class="admin-nav-section">Tổng quan</div>
+          <a href="index.html" class="admin-nav-item"
+            ><span class="admin-nav-icon"></span> Dashboard</a
+          >
+          <div class="admin-nav-section">Quản lý</div>
+          <a href="admin-books.html" class="admin-nav-item">
+            ><span class="admin-nav-icon"></span> Quản lý sách</a
+          >
+          <a href="categories.html" class="admin-nav-item"
+            ><span class="admin-nav-icon"></span> Quản lý danh mục</a
+          >
+          <a href="admin-orders.html" class="admin-nav-item">
+            ><span class="admin-nav-icon"></span> Quản lý đơn hàng</a
+          >
+          <a href="users.html" class="admin-nav-item active"
+            ><span class="admin-nav-icon"></span> Quản lý tài khoản</a
+          >
+          <div class="admin-nav-section">Hệ thống</div>
+          <a href="index.html" class="admin-nav-item"
+            ><span class="admin-nav-icon"></span> Về trang chủ</a
+          >
+          <button
+            class="admin-nav-item"
+            onclick="Auth.logout()"
+            style="color: #ff6b6b"
+          >
+            <span class="admin-nav-icon"></span> Đăng xuất
+          </button>
+        </nav>
+        <div class="admin-user-footer">
+          <div class="admin-user-avatar">A</div>
+          <div class="admin-user-info">
+            <div class="name">Admin</div>
+            <div class="role">Quản trị viên</div>
+          </div>
+        </div>
+      </aside>
+
+      <main class="admin-content">
+        <div class="admin-header">
+          <div class="admin-page-title">👥 Quản lý tài khoản</div>
+          <button
+            class="btn-primary"
+            style="padding: 10px 20px; font-size: 13px"
+            onclick="openUserModal()"
+          >
+            + Thêm tài khoản
+          </button>
+        </div>
+
+        <div class="admin-card">
+          <div class="admin-card-header">
+            <div class="admin-card-title">
+              Danh sách tài khoản (<span id="userCount">0</span>)
+            </div>
+            <input
+              type="text"
+              class="search-admin"
+              placeholder="🔍 Tìm kiếm..."
+              id="searchUsers"
+              oninput="filterUsers()"
+              autocomplete="off"
+            />
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>#ID</th>
+                  <th>Họ tên</th>
+                  <th>Email</th>
+                  <th>Điện thoại</th>
+                  <th>Vai trò</th>
+                  <th>Ngày tạo</th>
+                  <th>Thao tác</th>
+                </tr>
+              </thead>
+              <tbody id="usersTableBody">
+                <tr>
+                  <td
+                    colspan="7"
+                    style="
+                      text-align: center;
+                      padding: 40px;
+                      color: var(--ink-muted);
+                    "
+                  >
+                    Đang tải...
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <div class="modal-overlay hidden" id="userModal">
+      <div class="modal">
+        <div class="modal-header">
+          <div class="modal-title" id="userModalTitle">Thêm tài khoản</div>
+          <button class="modal-close" onclick="adminModal('userModal', false)">
+            ✕
+          </button>
+        </div>
+        <div class="modal-body">
+          <input type="hidden" id="userId" />
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Họ và tên *</label>
+              <input
+                type="text"
+                class="form-input"
+                id="userName"
+                placeholder="Nguyễn Văn A"
+                autocomplete="off"
+              />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Email *</label>
+              <input
+                type="email"
+                class="form-input"
+                id="userEmail"
+                placeholder="email@example.com"
+                autocomplete="off"
+              />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Số điện thoại</label>
+              <input
+                type="tel"
+                class="form-input"
+                id="userPhone"
+                placeholder="0123456789"
+                autocomplete="off"
+              />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Vai trò</label>
+              <select class="form-input" id="userRole" style="cursor: pointer">
+                <option value="user">Người dùng</option>
+                <option value="admin">Quản trị viên</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Địa chỉ</label>
+            <input
+              type="text"
+              class="form-input"
+              id="userAddress"
+              placeholder="Địa chỉ"
+              autocomplete="off"
+            />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Mật khẩu *</label>
+            <input
+              type="password"
+              class="form-input"
+              id="userPassword"
+              placeholder="••••••••"
+              autocomplete="new-password"
+            />
+          </div>
+          <div style="display: flex; gap: 12px; margin-top: 8px">
+            <button class="form-submit" onclick="saveUser()" style="flex: 1">
+              Lưu
+            </button>
+            <button
+              class="btn-secondary"
+              onclick="adminModal('userModal', false)"
+              style="flex: 1; color: var(--ink); border-color: var(--border)"
+            >
+              Hủy
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="main.js"></script>
+    <script src="admin.js"></script>
+    <script>
+      let allUsers = [];
+
+      async function loadUsers() {
+        if (!AdminAuth.check()) return;
+        const user = Auth.getUser();
+        document.querySelector(".admin-user-avatar").textContent = user.name
+          .charAt(0)
+          .toUpperCase();
+        document.querySelector(".admin-user-info .name").textContent =
+          user.name;
+
+        try {
+          allUsers = await api.get("/users");
+          document.getElementById("userCount").textContent = allUsers.length;
+          renderUsers(allUsers);
+        } catch {
+          Toast.show("Không thể tải dữ liệu", "error");
+        }
+      }
+
+      function renderUsers(users) {
+        const body = document.getElementById("usersTableBody");
+        if (!users.length) {
+          body.innerHTML =
+            '<tr><td colspan="7" style="text-align:center;padding:40px;color:var(--ink-muted)">Không có người dùng</td></tr>';
+          return;
+        }
+        body.innerHTML = users
+          .map(
+            (u) => `
+<tr>
+<td><strong>#${u.id}</strong></td>
+<td>
+<div style="display:flex;align-items:center;gap:8px">
+<div style="width:32px;height:32px;background:var(--amber);border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:13px;flex-shrink:0">${u.name
+              .charAt(0)
+              .toUpperCase()}</div>
+<strong>${u.name}</strong>
+</div>
+</td>
+<td style="color:var(--ink-muted)">${u.email}</td>
+<td>${u.phone || "—"}</td>
+<td><span class="badge-admin ${u.role}">${
+              u.role === "admin" ? "⚙️ Admin" : "👤 User"
+            }</span></td>
+<td style="color:var(--ink-muted)">${
+              u.createdAt ? fmt.date(u.createdAt) : "—"
+            }</td>
+<td>
+<div style="display:flex;gap:6px">
+<button class="icon-btn" onclick="editUser('${u.id}')" title="Sửa">✏️</button>
+<button class="icon-btn danger" onclick="deleteUser('${
+              u.id
+            }')" title="Xóa">🗑️</button>
+</div>
+</td>
+</tr>`,
+          )
+          .join("");
+      }
+
+      function filterUsers() {
+        const q = document.getElementById("searchUsers").value.toLowerCase();
+        renderUsers(
+          allUsers.filter(
+            (u) =>
+              u.name.toLowerCase().includes(q) ||
+              u.email.toLowerCase().includes(q),
+          ),
+        );
+      }
+
+      function openUserModal() {
+        document.getElementById("userId").value = "";
+        document.getElementById("userName").value = "";
+        document.getElementById("userEmail").value = "";
+        document.getElementById("userPhone").value = "";
+        document.getElementById("userRole").value = "user";
+        document.getElementById("userAddress").value = "";
+        document.getElementById("userPassword").value = "";
+        document.getElementById("userEmail").readOnly = false;
+        document.getElementById("userModalTitle").textContent =
+          "Thêm tài khoản";
+        adminModal("userModal", true);
+      }
+
+      function editUser(id) {
+        const u = allUsers.find((x) => String(x.id) === String(id));
+        if (!u) return;
+        document.getElementById("userId").value = u.id;
+        document.getElementById("userName").value = u.name;
+        document.getElementById("userEmail").value = u.email;
+        document.getElementById("userEmail").readOnly = true;
+        document.getElementById("userPhone").value = u.phone || "";
+        document.getElementById("userRole").value = u.role;
+        document.getElementById("userAddress").value = u.address || "";
+        document.getElementById("userPassword").value = "";
+        document.getElementById("userModalTitle").textContent = "Sửa tài khoản";
+        adminModal("userModal", true);
+      }
+
+      async function saveUser() {
+        const id = document.getElementById("userId").value;
+        const name = document.getElementById("userName").value.trim();
+        const email = document.getElementById("userEmail").value.trim();
+        const password = document.getElementById("userPassword").value.trim();
+
+        if (!name || !email || !password)
+          return Toast.show(
+            "Vui lòng điền đầy đủ các trường bắt buộc (*)",
+            "error",
+          );
+
+        const data = {
+          name,
+          email,
+          password:
+            password ||
+            (id
+              ? allUsers.find((u) => String(u.id) === String(id))?.password
+              : password),
+          phone: document.getElementById("userPhone").value.trim(),
+          role: document.getElementById("userRole").value,
+          address: document.getElementById("userAddress").value.trim(),
+          createdAt: id ? undefined : new Date().toISOString().split("T")[0],
+        };
+
+        try {
+          if (id) {
+            const existing = allUsers.find((u) => String(u.id) === String(id));
+            await api.put(`/users/${id}`, { ...existing, ...data });
+            Toast.show("Cập nhật tài khoản thành công! ", "success");
+          } else {
+            const existing = await api.get(`/users?email=${email}`);
+            if (existing.length > 0)
+              return Toast.show("Email đã tồn tại!", "error");
+            await api.post("/users", data);
+            Toast.show("Thêm tài khoản thành công! ", "success");
+          }
+          adminModal("userModal", false);
+          loadUsers();
+        } catch {
+          Toast.show("Lỗi lưu dữ liệu", "error");
+        }
+      }
+
+      async function deleteUser(id) {
+        const u = allUsers.find((x) => String(x.id) === String(id));
+        const currentUser = Auth.getUser();
+        if (u?.id === currentUser?.id)
+          return Toast.show("Không thể xóa tài khoản đang đăng nhập!", "error");
+        if (!confirmDelete(`Xóa tài khoản "${u?.name}"?`)) return;
+        try {
+          await api.delete(`/users/${id}`);
+          Toast.show("Đã xóa tài khoản!", "success");
+          loadUsers();
+        } catch {
+          Toast.show("Lỗi xóa dữ liệu", "error");
+        }
+      }
+
+      document.addEventListener("DOMContentLoaded", () => {
+        document.getElementById("userModal").addEventListener("click", (e) => {
+          if (e.target === document.getElementById("userModal"))
+            adminModal("userModal", false);
+        });
+      });
+
+      loadUsers();
+    </script>
+  </body>
+</html>

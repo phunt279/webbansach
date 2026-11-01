@@ -1,0 +1,95 @@
+/* Admin specific overrides - import after style.css */
+body {
+  background: #f0f2f5;
+}
+
+.admin-nav-section {
+  padding: 8px 16px 4px;
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.3);
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  margin-top: 8px;
+}
+
+.admin-user-footer {
+  padding: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.admin-user-avatar {
+  width: 36px;
+  height: 36px;
+  background: var(--amber);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  color: white;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.admin-user-info .name {
+  font-size: 13px;
+  color: white;
+  font-weight: 600;
+}
+.admin-user-info .role {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.chart-bar-wrap {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  height: 120px;
+  margin-top: 16px;
+}
+.chart-bar-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+.chart-bar {
+  width: 100%;
+  background: var(--amber);
+  border-radius: 4px 4px 0 0;
+  min-height: 4px;
+  transition: all 0.5s ease;
+}
+.chart-bar-label {
+  font-size: 11px;
+  color: var(--ink-muted);
+}
+.chart-bar-val {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.search-admin {
+  padding: 9px 14px;
+  border: 1.5px solid #e8edf5;
+  border-radius: 8px;
+  font-family: "DM Sans", sans-serif;
+  font-size: 13px;
+  outline: none;
+  min-width: 220px;
+  transition: all 0.2s;
+}
+.search-admin:focus {
+  border-color: var(--amber);
+  box-shadow: 0 0 0 3px rgba(200, 133, 42, 0.1);
+}
+
+.modal-overlay {
+  background: rgba(0, 0, 0, 0.5);
+}

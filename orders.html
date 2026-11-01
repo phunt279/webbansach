@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lịch sử đơn hàng - PAT</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header>
+      <div class="header-top">Sách là kho tàng tri thức</div>
+      <div class="header-main">
+        <a href="index.html" class="logo"
+          ><div>
+            <div class="logo-text">PAT</div>
+            <span class="logo-sub">Nhà sách trực tuyến</span>
+          </div>
+        </a>
+        <div style="flex: 1"></div>
+        <div class="header-actions">
+          <a href="profile.html" class="header-btn" id="authBtn"
+            ><span class="icon"></span><span class="label">Tài khoản</span></a
+          >
+          <button class="header-btn" onclick="openCartSidebar()">
+            <span class="icon"></span><span class="label">Giỏ hàng</span>
+            <span class="cart-badge" style="display: none">0</span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <nav><div class="nav-inner" id="mainNav"></div></nav>
+
+    <div class="page-header">
+      <div class="page-header-inner">
+        <div class="breadcrumb">
+          <a href="index.html">Trang chủ</a> > <span>Đơn hàng</span>
+        </div>
+        <div class="page-title">Lịch sử mua hàng</div>
+      </div>
+    </div>
+
+    <section class="section">
+      <div class="section-inner" style="max-width: 800px">
+        <div id="loginPrompt" class="empty-state hidden">
+          <div class="emoji"></div>
+          <h3>Vui lòng đăng nhập</h3>
+          <p>Bạn cần đăng nhập để xem lịch sử đơn hàng của mình.</p>
+        </div>
+        <div id="emptyOrders" class="empty-state hidden">
+          <div class="emoji"></div>
+          <h3>Chưa có đơn hàng nào</h3>
+          <a href="books.html" class="btn-primary" style="margin-top: 10px"
+            >Mua sắm ngay</a
+          >
+        </div>
+        <div class="orders-list" id="ordersContainer"></div>
+      </div>
+    </section>
+
+    <div class="cart-overlay hidden" id="cartOverlay">
+      <div class="cart-sidebar" id="cartSidebar">
+        <div class="cart-header">
+          <div class="cart-title">Giỏ hàng</div>
+          <button class="modal-close" onclick="closeCartSidebar()">✕</button>
+        </div>
+        <div class="cart-items"></div>
+        <div class="cart-footer hidden">
+          <div class="cart-total">
+            <span class="cart-total-label">Tổng cộng</span>
+            <span class="cart-total-amount">0₫</span>
+          </div>
+          <a
+            href="checkout.html"
+            class="btn-primary"
+            style="width: 100%; justify-content: center"
+            >Thanh toán ngay →</a
+          >
+        </div>
+      </div>
+    </div>
+
+    <script src="main.js"></script>
+    <script>
+      async function loadUserOrders() {
+        const user = Auth.getUser();
+        if (!user) {
+          document.getElementById("loginPrompt").classList.remove("hidden");
+          return;
+        }
+
+        try {
+          const [orders, books] = await Promise.all([
+            api.get(`/orders?userId=${user.id}`),
+            api.get("/books"),
+          ]);
+          const container = document.getElementById("ordersContainer");
+          if (orders.length === 0) {
+            document.getElementById("emptyOrders").classList.remove("hidden");
+            return;
+          }
+
+          orders.sort((a, b) => b.id - a.id);
+
+          container.innerHTML = orders
+            .map((order) => {
+              const statusMap = {
+                pending: { text: "Chờ xử lý", class: "status-pending" },
+                processing: { text: "Đang xử lý", class: "status-processing" },
+                delivered: { text: "Đã giao hàng", class: "status-delivered" },
+                cancelled: { text: "Đã hủy", class: "status-cancelled" },
+              };
+              const currentStatus = statusMap[order.status] || {
+                text: order.status,
+                class: "status-pending",
+              };
+
+              const itemsHTML = (order.items || [])
+                .map((item) => {
+                  const bookInfo = books.find((b) => b.id === item.bookId);
+                  return `
+                      <div style="display:flex; gap:10px; align-items:center; margin-bottom:8px;">
+                        <img src="${
+                          bookInfo?.image || ""
+                        }" class="order-item-thumb" style="width: 50px; border-radius: 4px;" onerror="this.src='https://via.placeholder.com/56x75?text=📚'">
+                        <div>
+                          <div style="font-weight:600; font-size:14px;">${
+                            bookInfo?.title || "Sách đã xóa"
+                          }</div>
+                          <div style="font-size:12px; color:var(--ink-muted)">Số lượng: ${
+                            item.quantity
+                          } x ${fmt.price(item.price)}</div>
+                        </div>
+                      </div>
+                    `;
+                })
+                .join("");
+
+              return `
+                    <div class="order-card" style="margin-bottom: 20px;">
+                      <div class="order-card-header">
+                        <div>
+                          <div class="order-id">Mã đơn hàng: #${order.id}</div>
+                          <div class="order-date">Ngày đặt: ${
+                            order.createdAt || "—"
+                          }</div>
+                        </div>
+                        <span class="order-status ${currentStatus.class}">${
+                          currentStatus.text
+                        }</span>
+                      </div>
+                      <div style="padding: 10px 0;">${itemsHTML}</div>
+                      <div class="order-footer">
+                        <div style="color:var(--ink-muted)">Phương thức: <span style="text-transform:uppercase; font-weight:600">${
+                          order.paymentMethod || "COD"
+                        }</span></div>
+                        <div class="order-total">Tổng tiền: ${fmt.price(
+                          order.total,
+                        )}</div>
+                      </div>
+                    </div>
+                  `;
+            })
+            .join("");
+        } catch {
+          Toast.show("Không thể tải danh sách đơn hàng", "error");
+        }
+      }
+      document.addEventListener("DOMContentLoaded", loadUserOrders);
+    </script>
+  </body>
+</html>

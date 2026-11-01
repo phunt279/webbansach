@@ -1,0 +1,291 @@
+{
+  "books": [
+    {
+      "id": "1",
+      "title": "Đắc Nhân Tâm",
+      "author": "Dale Carnegie",
+      "price": 86000,
+      "originalPrice": 120000,
+      "categoryId": 2,
+      "image": "images/dac-nhan-tam.jpg",
+      "description": "Đắc Nhân Tâm của Dale Carnegie là quyển sách nổi tiếng nhất, bán chạy nhất và có tầm ảnh hưởng nhất của mọi thời đại.",
+      "stock": 50,
+      "rating": 4.8,
+      "reviews": 1200,
+      "featured": true
+    },
+    {
+      "id": "2",
+      "title": "Nhà Giả Kim",
+      "author": "Paulo Coelho",
+      "price": 79000,
+      "originalPrice": 95000,
+      "categoryId": 1,
+      "image": "images/nha-gia-kim.jpg",
+      "description": "Tác phẩm của Paulo Coelho kể về hành trình của một chàng trai trẻ người Tây Ban Nha tên Santiago.",
+      "stock": 30,
+      "rating": 4.7,
+      "reviews": 980,
+      "featured": true
+    },
+    {
+      "id": "3",
+      "title": "Tuổi Trẻ Đáng Giá Bao Nhiêu",
+      "author": "Rosie Nguyễn",
+      "price": 68000,
+      "originalPrice": 80000,
+      "categoryId": 2,
+      "image": "images/tuoi-tre-dang-gia-bao-nhieu.jpg",
+      "description": "Cuốn sách là những trải nghiệm thực tế của tác giả trong những năm tháng tuổi trẻ.",
+      "stock": 45,
+      "rating": 4.5,
+      "reviews": 750,
+      "featured": true
+    },
+    {
+      "id": "4",
+      "title": "Sapiens: Lược Sử Loài Người",
+      "author": "Yuval Noah Harari",
+      "price": 189000,
+      "originalPrice": 229000,
+      "categoryId": 3,
+      "image": "images/sapiens.jpg",
+      "description": "Sapiens khám phá lịch sử nhân loại từ thời đồ đá đến thời hiện đại.",
+      "stock": 20,
+      "rating": 4.9,
+      "reviews": 2100,
+      "featured": true
+    },
+    {
+      "id": "5",
+      "title": "Dám Bị Ghét",
+      "author": "Kishimi Ichiro",
+      "price": 95000,
+      "originalPrice": 115000,
+      "categoryId": 2,
+      "image": "images/dam-bi-ghet.jpg",
+      "description": "Dám Bị Ghét là một cuốn sách triết học tự giúp bản thân theo phong cách Nhật Bản.",
+      "stock": 35,
+      "rating": 4.6,
+      "reviews": 890,
+      "featured": false
+    },
+    {
+      "id": "6",
+      "title": "Cây Cam Ngọt Của Tôi",
+      "author": "José Mauro de Vasconcelos",
+      "price": 99000,
+      "originalPrice": 119000,
+      "categoryId": 1,
+      "image": "images/cay-cam-ngot.jpg",
+      "description": "Cây Cam Ngọt Của Tôi là câu chuyện về tuổi thơ đầy màu sắc của cậu bé Zézé.",
+      "stock": 25,
+      "rating": 4.8,
+      "reviews": 1450,
+      "featured": false
+    },
+    {
+      "id": "7",
+      "title": "Atomic Habits",
+      "author": "James Clear",
+      "price": 135000,
+      "originalPrice": 160000,
+      "categoryId": 2,
+      "image": "images/atomic-habits.jpg",
+      "description": "Atomic Habits cung cấp một khung đã được chứng minh để xây dựng thói quen tốt và phá vỡ thói quen xấu.",
+      "stock": 40,
+      "rating": 4.9,
+      "reviews": 3200,
+      "featured": false
+    },
+    {
+      "id": "8",
+      "title": "Tôi Thấy Hoa Vàng Trên Cỏ Xanh",
+      "author": "Nguyễn Nhật Ánh",
+      "price": 72000,
+      "originalPrice": 88000,
+      "categoryId": 1,
+      "image": "images/hoa-vang-co-xanh.jpg",
+      "description": "Tiểu thuyết của Nguyễn Nhật Ánh kể về tuổi thơ làng quê Việt Nam.",
+      "stock": 60,
+      "rating": 4.7,
+      "reviews": 1800,
+      "featured": false
+    },
+    {
+      "id": "9",
+      "title": "Cha Giàu Cha Nghèo",
+      "author": "Robert Kiyosaki",
+      "price": 85000,
+      "originalPrice": 109000,
+      "categoryId": 4,
+      "image": "images/cha-giau-cha-ngheo.jpg",
+      "description": "Cuốn sách kinh điển về tư duy tài chính, quản lý tiền bạc và kinh doanh.",
+      "stock": 100,
+      "rating": 4.9,
+      "reviews": 2500,
+      "featured": true
+    },
+    {
+      "id": "10",
+      "title": "Dám Hành Động ",
+      "author": "Ben S. Bernanke",
+      "price": 255000,
+      "originalPrice": 290000,
+      "categoryId": 4,
+      "image": "images/dam-hanh-dong.jpg",
+      "description": "Dám Hành Động là cuốn sách súc tích, chi tiết, đáng đọc đối với bất cứ ai quan tâm đến tài chính và kinh tế.",
+      "stock": 100,
+      "rating": 4.5,
+      "reviews": 2970,
+      "featured": true
+    }
+  ],
+  "categories": [
+    {
+      "id": "1",
+      "name": "Văn học",
+      "icon": "",
+      "description": "Tiểu thuyết, truyện ngắn, thơ"
+    },
+    {
+      "id": "2",
+      "name": "Kỹ năng sống",
+      "icon": "",
+      "description": "Phát triển bản thân, tư duy"
+    },
+    {
+      "id": "3",
+      "name": "Lịch sử",
+      "icon": "",
+      "description": "Lịch sử thế giới và Việt Nam"
+    },
+    {
+      "id": "4",
+      "name": "Kinh tế",
+      "icon": "",
+      "description": "Kinh doanh, tài chính"
+    },
+    {
+      "id": "5",
+      "name": "Khoa học",
+      "icon": "🔬",
+      "description": "Khoa học tự nhiên và xã hội"
+    }
+  ],
+  "users": [
+    {
+      "id": "1",
+      "name": "Admin",
+      "email": "admin@bookstore.com",
+      "password": "admin123",
+      "role": "admin",
+      "phone": "0969129615",
+      "address": "Hà Nội",
+      "createdAt": "2026-06-01"
+    },
+    {
+      "name": "hiu",
+      "email": "123@GMAIL.COM",
+      "phone": "1221312312",
+      "password": "123",
+      "role": "user",
+      "address": "",
+      "createdAt": "2026-06-01",
+      "id": "HpBw2kSanGQ"
+    },
+    {
+      "name": "ahihi",
+      "email": "ahh@gmail.com",
+      "phone": "0999999936",
+      "password": "123456",
+      "role": "user",
+      "address": "",
+      "createdAt": "2026-06-03",
+      "id": "HLRVIAe9RBI"
+    },
+    {
+      "name": "alo",
+      "email": "tu@gmail.com",
+      "phone": "0999999936",
+      "password": "123456",
+      "role": "user",
+      "address": "",
+      "createdAt": "2026-06-03",
+      "id": "rdWOrtQgIy4"
+    },
+    {
+      "name": "trongphu",
+      "email": "phu@gmail.com",
+      "phone": "0999999936",
+      "password": "123456",
+      "role": "user",
+      "address": "",
+      "createdAt": "2026-06-03",
+      "id": "XHx77MemTss"
+    }
+  ],
+  "orders": [
+    {
+      "id": "1",
+      "userId": 1,
+      "items": [
+        {
+          "bookId": 1,
+          "quantity": 2,
+          "price": 86000
+        }
+      ],
+      "total": 172000,
+      "status": "delivered",
+      "address": " Hà Nội",
+      "phone": "0969129615",
+      "createdAt": "2026-06-01"
+    },
+    {
+      "userId": "1",
+      "items": [
+        {
+          "bookId": "1",
+          "quantity": 7,
+          "price": 86000
+        }
+      ],
+      "total": 602000,
+      "shippingFee": 0,
+      "subtotal": 602000,
+      "status": "delivered",
+      "name": "Admin",
+      "phone": "0969129615",
+      "email": "admin@bookstore.com",
+      "address": "Hà Nội",
+      "note": "",
+      "paymentMethod": "cod",
+      "createdAt": "2026-06-01",
+      "id": "zLimGNsPRls"
+    },
+    {
+      "userId": "Fdi7xa8y6HE",
+      "items": [
+        {
+          "bookId": "1",
+          "quantity": 1,
+          "price": 86000
+        }
+      ],
+      "total": 116000,
+      "shippingFee": 30000,
+      "subtotal": 86000,
+      "status": "delivered",
+      "name": "ahihi",
+      "phone": "0999999936",
+      "email": "ahi@gmail.com",
+      "address": "hà nội",
+      "note": "",
+      "paymentMethod": "cod",
+      "createdAt": "2026-06-03",
+      "id": "xqMvky3AHlo"
+    }
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
+}

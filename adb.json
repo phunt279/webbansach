@@ -1,0 +1,7 @@
+{
+  "posts": [
+    { "id": "1", "title": "Bai viet dau tien", "author": "An" },
+    { "id": "2", "title": "Hoc json-server", "author": "Binh" }
+  ],
+  "comments": [{ "id": "1", "text": "Bai viet hay qua!", "postId": "1" }]
+}

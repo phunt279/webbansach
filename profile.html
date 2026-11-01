@@ -1,0 +1,271 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tài khoản - PAT</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header>
+      <div class="header-top">Sách là kho tàng tri thức</div>
+      <div class="header-main">
+        <a href="index.html" class="logo">
+          <div>
+            <div class="logo-text">PAT</div>
+            <span class="logo-sub">Nhà sách trực tuyến</span>
+          </div>
+        </a>
+        <form class="search-bar" id="searchForm">
+          <input type="text" id="searchInput" placeholder="Tìm kiếm sách..." />
+          <button type="submit"></button>
+        </form>
+        <div class="header-actions">
+          <a href="profile.html" class="header-btn" id="authBtn"
+            ><span class="icon"></span><span class="label">Tài khoản</span></a
+          >
+          <a
+            href="admin/index.html"
+            class="header-btn"
+            id="adminBtn"
+            style="display: none"
+            ><span class="icon"></span><span class="label">Admin</span></a
+          >
+          <button class="header-btn" onclick="openCartSidebar()">
+            <span class="icon"></span><span class="label">Giỏ hàng</span
+            ><span class="cart-badge" style="display: none">0</span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <div class="page-header">
+      <div class="page-header-inner">
+        <div class="breadcrumb">
+          <a href="index.html">Trang chủ</a>> <span>Tài khoản</span>
+        </div>
+        <div class="page-title">Tài khoản của tôi</div>
+      </div>
+    </div>
+
+    <div class="profile-grid">
+      <div class="profile-sidebar">
+        <div class="profile-avatar">
+          <div class="avatar-circle" id="avatarChar"></div>
+          <div class="avatar-name" id="avatarName">Khách</div>
+          <div class="avatar-email" id="avatarEmail">—</div>
+        </div>
+        <div class="profile-nav">
+          <a href="profile.html" class="profile-nav-item active"
+            >Thông tin cá nhân</a
+          >
+          <a href="orders.html" class="profile-nav-item">Lịch sử mua hàng</a>
+          <button
+            class="profile-nav-item"
+            onclick="Auth.logout()"
+            style="color: var(--rust)"
+          >
+            Đăng xuất
+          </button>
+        </div>
+      </div>
+
+      <div>
+        <div id="loginPrompt" class="empty-state hidden">
+          <div class="emoji"></div>
+          <h3>Vui lòng đăng nhập</h3>
+          <p>Bạn cần đăng nhập để xem tài khoản</p>
+          <br />
+          <a href="../index.html" class="btn-primary"
+            >Về trang chủ để đăng nhập</a
+          >
+        </div>
+
+        <div id="profileContent" class="hidden">
+          <div class="checkout-card">
+            <div class="checkout-card-title">Cập nhật thông tin</div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">Họ và tên</label>
+                <input type="text" class="form-input" id="profileName" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Email</label>
+                <input
+                  type="email"
+                  class="form-input"
+                  id="profileEmail"
+                  readonly
+                  style="opacity: 0.6"
+                />
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">Số điện thoại</label>
+                <input type="tel" class="form-input" id="profilePhone" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Ngày tham gia</label>
+                <input
+                  type="text"
+                  class="form-input"
+                  id="profileCreated"
+                  readonly
+                  style="opacity: 0.6"
+                />
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Địa chỉ</label>
+              <input type="text" class="form-input" id="profileAddress" />
+            </div>
+            <button
+              class="btn-primary"
+              onclick="saveProfile()"
+              style="margin-top: 8px"
+            >
+              Lưu thay đổi
+            </button>
+          </div>
+
+          <div class="checkout-card" style="margin-top: 24px">
+            <div class="checkout-card-title">Đổi mật khẩu</div>
+            <div class="form-group">
+              <label class="form-label">Mật khẩu hiện tại</label>
+              <input
+                type="password"
+                class="form-input"
+                id="oldPassword"
+                placeholder="••••••••"
+              />
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">Mật khẩu mới</label>
+                <input
+                  type="password"
+                  class="form-input"
+                  id="newPassword"
+                  placeholder="••••••••"
+                />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Xác nhận mật khẩu</label>
+                <input
+                  type="password"
+                  class="form-input"
+                  id="confirmPassword"
+                  placeholder="••••••••"
+                />
+              </div>
+            </div>
+            <button
+              class="btn-primary"
+              onclick="changePassword()"
+              style="margin-top: 8px"
+            >
+              Đổi mật khẩu
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CART -->
+    <div class="cart-overlay hidden" id="cartOverlay">
+      <div class="cart-sidebar" id="cartSidebar">
+        <div class="cart-header">
+          <div class="cart-title">Giỏ hàng</div>
+          <button class="modal-close" onclick="closeCartSidebar()">✕</button>
+        </div>
+        <div class="cart-items"></div>
+        <div class="cart-footer hidden">
+          <div class="cart-total">
+            <span class="cart-total-label">Tổng cộng</span
+            ><span class="cart-total-amount">0₫</span>
+          </div>
+          <a
+            href="checkout.html"
+            class="btn-primary"
+            style="width: 100%; justify-content: center"
+            >Thanh toán ngay →</a
+          >
+        </div>
+      </div>
+    </div>
+
+    <script src="main.js"></script>
+    <script>
+      async function loadProfile() {
+        const user = Auth.getUser();
+        if (!user) {
+          document.getElementById("loginPrompt").classList.remove("hidden");
+          return;
+        }
+        document.getElementById("avatarChar").textContent = user.name
+          ? user.name.charAt(0).toUpperCase()
+          : "👤";
+        document.getElementById("avatarName").textContent = user.name;
+        document.getElementById("avatarEmail").textContent = user.email;
+        document.getElementById("profileName").value = user.name || "";
+        document.getElementById("profileEmail").value = user.email || "";
+        document.getElementById("profilePhone").value = user.phone || "";
+        document.getElementById("profileAddress").value = user.address || "";
+        document.getElementById("profileCreated").value = user.createdAt
+          ? fmt.date(user.createdAt)
+          : "—";
+        document.getElementById("profileContent").classList.remove("hidden");
+      }
+
+      async function saveProfile() {
+        const user = Auth.getUser();
+        if (!user) return;
+        const updated = {
+          ...user,
+          name: document.getElementById("profileName").value.trim(),
+          phone: document.getElementById("profilePhone").value.trim(),
+          address: document.getElementById("profileAddress").value.trim(),
+        };
+        try {
+          await api.put(`/users/${user.id}`, updated);
+          Auth.setUser(updated);
+          Toast.show("Cập nhật thành công! ", "success");
+          loadProfile();
+          renderHeader();
+        } catch {
+          Toast.show("Lỗi cập nhật", "error");
+        }
+      }
+
+      async function changePassword() {
+        const user = Auth.getUser();
+        if (!user) return;
+        const oldPwd = document.getElementById("oldPassword").value;
+        const newPwd = document.getElementById("newPassword").value;
+        const confirmPwd = document.getElementById("confirmPassword").value;
+        if (!oldPwd || !newPwd)
+          return Toast.show("Vui lòng điền đầy đủ", "error");
+        if (oldPwd !== user.password)
+          return Toast.show("Mật khẩu hiện tại không đúng", "error");
+        if (newPwd !== confirmPwd)
+          return Toast.show("Mật khẩu xác nhận không khớp", "error");
+        if (newPwd.length < 6)
+          return Toast.show("Mật khẩu phải ít nhất 6 ký tự", "error");
+        try {
+          const updated = { ...user, password: newPwd };
+          await api.put(`/users/${user.id}`, updated);
+          Auth.setUser(updated);
+          document.getElementById("oldPassword").value = "";
+          document.getElementById("newPassword").value = "";
+          document.getElementById("confirmPassword").value = "";
+          Toast.show("Đổi mật khẩu thành công! ", "success");
+        } catch {
+          Toast.show("Lỗi đổi mật khẩu", "error");
+        }
+      }
+
+      loadProfile();
+    </script>
+  </body>
+</html>

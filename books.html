@@ -1,0 +1,392 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tất cả sách - PAT</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header>
+      <div class="header-top">
+       Sách là kho tàng tri thức
+      </div>
+      <div class="header-main">
+        <a href="index.html" class="logo">
+          <div>
+            <div class="logo-text">PAT</div>
+            <span class="logo-sub">Nhà sách trực tuyến</span>
+          </div>
+        </a>
+        <form class="search-bar" id="searchForm">
+          <input type="text" id="searchInput" placeholder="Tìm kiếm sách..." />
+          <button type="submit">🔍</button>
+        </form>
+          <a
+            href="index.html"
+            class="header-btn"
+            id="adminBtn"
+            style="display: none"
+            ><span class="icon">⚙️</span><span class="label">Admin</span></a
+          >
+          <button class="header-btn" onclick="openCartSidebar()">
+            <span class="icon">🛒</span><span class="label">Giỏ hàng</span
+            ><span class="cart-badge" style="display: none">0</span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <nav>
+      <div class="nav-inner">
+        <a href="index.html" class="nav-link"> Trang chủ</a>
+        <a href="books.html" class="nav-link active"> Tất cả sách</a>
+        <a href="books.html?cat=1" class="nav-link">Văn học</a>
+        <a href="books.html?cat=2" class="nav-link">Kỹ năng sống</a>
+        <a href="books.html?cat=3" class="nav-link"> Lịch sử</a>
+        <a href="books.html?sale=true" class="nav-link">Khuyến mãi</a>
+      </div>
+    </nav>
+
+    <div class="page-header">
+      <div class="page-header-inner">
+        <div class="breadcrumb">
+          <a href="index.html">Trang chủ</a> >
+          <span id="pageTitle">Tất cả sách</span>
+        </div>
+        <div class="page-title" id="pageHeading">Tất cả sách</div>
+      </div>
+    </div>
+
+    <!-- FILTER BAR -->
+    <div
+      style="
+        background: var(--warm-white);
+        border-bottom: 1px solid var(--border);
+      "
+    >
+      <div class="filter-bar">
+        <button class="filter-btn active" onclick="filterCat(0, this)">
+          Tất cả
+        </button>
+        <span id="catFilterBtns"></span>
+        <select class="sort-select" id="sortSelect" onchange="applySort()">
+          <option value="default">Sắp xếp mặc định</option>
+          <option value="price-asc">Giá thấp → cao</option>
+          <option value="price-desc">Giá cao → thấp</option>
+          <option value="name-asc">Tên A → Z</option>
+          <option value="rating-desc">Đánh giá cao nhất</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- BOOKS GRID -->
+    <section class="section">
+      <div class="section-inner">
+        <div
+          style="
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+          "
+        >
+          <div
+            id="resultsCount"
+            style="color: var(--ink-muted); font-size: 14px"
+          ></div>
+        </div>
+        <div class="books-grid" id="booksGrid">
+          <div class="loading"><div class="spinner"></div></div>
+        </div>
+        <div id="emptyState" class="empty-state hidden">
+          <div class="emoji"></div>
+          <h3>Không tìm thấy sách</h3>
+          <p>Thử tìm kiếm với từ khóa khác hoặc xem tất cả sách</p>
+          <br />
+          <a href="books.html" class="btn-primary">Xem tất cả sách</a>
+        </div>
+        <div class="pagination" id="pagination"></div>
+      </div>
+    </section>
+
+    <footer>
+      <div class="footer-inner">
+        <div class="footer-brand">
+          <div class="logo">
+            <div class="logo-text">PAT</div>
+          </div>
+          <p>Khám phá thế giới qua từng trang sách</p>
+        </div>
+        <div class="footer-col">
+          <h4>Liên kết</h4>
+          <ul>
+            <li><a href="index.html">Trang chủ</a></li>
+            <li><a href="books.html">Tất cả sách</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Hỗ trợ</h4>
+          <ul>
+            <li><a href="#">Hướng dẫn mua hàng</a></li>
+            <li><a href="#">Liên hệ</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Liên hệ</h4>
+          <ul>
+            <li><a href="#"> 0969129615</a></li>
+            <li><a href="#"> pat@gmail.com</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 PAT</span><span>Made in Vietnam</span>
+      </div>
+    </footer>
+
+    <!-- CART SIDEBAR -->
+    <div class="cart-overlay hidden" id="cartOverlay">
+      <div class="cart-sidebar" id="cartSidebar">
+        <div class="cart-header">
+          <div class="cart-title"> Giỏ hàng</div>
+          <button class="modal-close" onclick="closeCartSidebar()">✕</button>
+        </div>
+        <div class="cart-items"></div>
+        <div class="cart-footer hidden">
+          <div class="cart-total">
+            <span class="cart-total-label">Tổng cộng</span>
+            <span class="cart-total-amount">0₫</span>
+          </div>
+          <a
+            href="checkout.html"
+            class="btn-primary"
+            style="width: 100%; justify-content: center"
+            >Thanh toán ngay →</a
+          >
+        </div>
+      </div>
+    </div>
+
+    <!-- QUICK VIEW -->
+    <div class="modal-overlay hidden" id="quickViewModal">
+      <div class="modal" style="max-width: 640px">
+        <div class="modal-header">
+          <div class="modal-title">Xem nhanh</div>
+          <button class="modal-close" onclick="closeModal('quickViewModal')">
+            ✕
+          </button>
+        </div>
+        <div class="modal-body" id="quickViewBody"></div>
+      </div>
+    </div>
+
+    <!-- LOGIN MODAL -->
+    <div class="modal-overlay hidden" id="loginModal">
+      <div class="modal">
+        <div class="modal-header">
+          <div class="modal-title">Đăng nhập</div>
+          <button class="modal-close" onclick="closeModal('loginModal')">
+            ✕
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label class="form-label">Email</label
+            ><input type="email" class="form-input" id="loginEmail" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Mật khẩu</label
+            ><input type="password" class="form-input" id="loginPassword" />
+          </div>
+          <button class="form-submit" onclick="doLogin()">Đăng nhập</button>
+        </div>
+      </div>
+    </div>
+
+    <script src="main.js"></script>
+    <script>
+      let allBooks = [];
+      let allCats = [];
+      let currentCat = 0;
+      let currentSort = "default";
+      const ITEMS_PER_PAGE = 8;
+      let currentPage = 1;
+
+      async function loadBooks() {
+        const params = new URLSearchParams(window.location.search);
+        const q = params.get("q");
+        const catId = parseInt(params.get("cat")) || 0;
+        const sale = params.get("sale");
+
+        try {
+          const [books, cats] = await Promise.all([
+            api.get("/books"),
+            api.get("/categories"),
+          ]);
+          allBooks = books;
+          allCats = cats;
+          booksCache = books;
+          catsCache = cats;
+
+          // Category filter buttons
+          document.getElementById("catFilterBtns").innerHTML = cats
+            .map(
+              (c) =>
+                `<button class="filter-btn" onclick="filterCat(${c.id}, this)">${c.icon} ${c.name}</button>`,
+            )
+            .join("");
+
+          // Apply initial filters
+          if (q) {
+            document.getElementById("pageTitle").textContent =
+              `Tìm kiếm: "${q}"`;
+            document.getElementById("pageHeading").textContent =
+              `Kết quả tìm kiếm cho "${q}"`;
+            document.getElementById("searchInput").value = q;
+            allBooks = books.filter(
+              (b) =>
+                b.title.toLowerCase().includes(q.toLowerCase()) ||
+                b.author.toLowerCase().includes(q.toLowerCase()),
+            );
+          } else if (catId) {
+            currentCat = catId;
+            const cat = cats.find((c) => String(c.id) === String(catId));
+            if (cat) {
+              document.getElementById("pageTitle").textContent = cat.name;
+              document.getElementById("pageHeading").textContent =
+                `${cat.icon} ${cat.name}`;
+            }
+            // Highlight filter btn
+            setTimeout(() => {
+              const btns = document.querySelectorAll(".filter-btn");
+              btns.forEach((b) => {
+                b.classList.remove("active");
+                if (b.textContent.trim().includes(cat?.name))
+                  b.classList.add("active");
+              });
+            }, 100);
+          } else if (sale) {
+            document.getElementById("pageTitle").textContent = "Khuyến mãi";
+            document.getElementById("pageHeading").textContent =
+              " Sách khuyến mãi";
+            allBooks = books.filter(
+              (b) => b.originalPrice && b.originalPrice > b.price,
+            );
+          }
+
+          renderBooks();
+        } catch (e) {
+          console.error(e);
+          Toast.show("Không thể tải dữ liệu. Hãy chạy json-server!", "error");
+        }
+      }
+
+      function filterCat(catId, btn) {
+        currentCat = catId;
+        currentPage = 1;
+        document
+          .querySelectorAll(".filter-btn")
+          .forEach((b) => b.classList.remove("active"));
+        if (btn) btn.classList.add("active");
+        renderBooks();
+      }
+
+      function applySort() {
+        currentSort = document.getElementById("sortSelect").value;
+        currentPage = 1;
+        renderBooks();
+      }
+
+      function renderBooks() {
+        let books = [...allBooks];
+
+        // Category filter
+      if (currentCat) {
+      books = books.filter((b) => String(b.categoryId) === String(currentCat));
+      }
+
+        // Sort
+        switch (currentSort) {
+          case "price-asc":
+            books.sort((a, b) => a.price - b.price);
+            break;
+          case "price-desc":
+            books.sort((a, b) => b.price - a.price);
+            break;
+          case "name-asc":
+            books.sort((a, b) => a.title.localeCompare(b.title));
+            break;
+          case "rating-desc":
+            books.sort((a, b) => (b.rating || 0) - (a.rating || 0));
+            break;
+        }
+
+        const total = books.length;
+        document.getElementById("resultsCount").textContent =
+          `Hiển thị ${total} sách`;
+
+        const grid = document.getElementById("booksGrid");
+        const emptyState = document.getElementById("emptyState");
+
+        if (books.length === 0) {
+          grid.classList.add("hidden");
+          emptyState.classList.remove("hidden");
+          document.getElementById("pagination").innerHTML = "";
+          return;
+        }
+
+        grid.classList.remove("hidden");
+        emptyState.classList.add("hidden");
+
+        // Pagination
+        const totalPages = Math.ceil(books.length / ITEMS_PER_PAGE);
+        const start = (currentPage - 1) * ITEMS_PER_PAGE;
+        const paged = books.slice(start, start + ITEMS_PER_PAGE);
+
+        grid.innerHTML = paged.map((b) => renderBookCard(b, allCats)).join("");
+
+        // Pagination controls
+        if (totalPages > 1) {
+          let paginationHTML = "";
+          if (currentPage > 1)
+            paginationHTML += `<button class="page-btn" onclick="goPage(${currentPage - 1})">‹</button>`;
+          for (let i = 1; i <= totalPages; i++) {
+            paginationHTML += `<button class="page-btn ${i === currentPage ? "active" : ""}" onclick="goPage(${i})">${i}</button>`;
+          }
+          if (currentPage < totalPages)
+            paginationHTML += `<button class="page-btn" onclick="goPage(${currentPage + 1})">›</button>`;
+          document.getElementById("pagination").innerHTML = paginationHTML;
+        } else {
+          document.getElementById("pagination").innerHTML = "";
+        }
+      }
+
+      function goPage(page) {
+        currentPage = page;
+        renderBooks();
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+
+      async function doLogin() {
+        const email = document.getElementById("loginEmail").value.trim();
+        const pwd = document.getElementById("loginPassword").value.trim();
+        if (!email || !pwd) return Toast.show("Vui lòng điền đầy đủ", "error");
+        try {
+          const users = await api.get(`/users?email=${email}&password=${pwd}`);
+          if (!users.length)
+            return Toast.show("Sai email hoặc mật khẩu", "error");
+          Auth.setUser(users[0]);
+          closeModal("loginModal");
+          renderHeader();
+          Toast.show(`Chào ${users[0].name}! `, "success");
+        } catch {
+          Toast.show("Lỗi kết nối", "error");
+        }
+      }
+
+      loadBooks();
+    </script>
+  </body>
+</html>
+

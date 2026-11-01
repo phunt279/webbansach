@@ -1,0 +1,563 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quản lý sách - Admin PAT</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="admin.css" />
+  </head>
+  <body>
+    <div class="admin-layout">
+      <aside class="admin-sidebar">
+        <div class="admin-logo">
+          <a
+            href="admin-dashboard.html"
+            style="
+              text-decoration: none;
+              display: flex;
+              align-items: center;
+              gap: 10px;
+            "
+          >
+            <div
+              class="logo-icon"
+              style="width: 36px; height: 36px; font-size: 18px"
+            ></div>
+            <div>
+              <div class="logo-text" style="font-size: 18px">PAT</div>
+              <div
+                style="
+                  font-size: 10px;
+                  color: rgba(255, 255, 255, 0.4);
+                  letter-spacing: 1px;
+                "
+              ></div>
+            </div>
+          </a>
+        </div>
+        <nav class="admin-nav">
+          <div class="admin-nav-section">Tổng quan</div>
+          <a href="admin-dashboard.html" class="admin-nav-item"
+            ><span class="admin-nav-icon"></span> Dashboard</a
+          >
+          <div class="admin-nav-section">Quản lý</div>
+          <a href="admin-books.html" class="admin-nav-item active"
+            ><span class="admin-nav-icon"></span> Quản lý sách</a
+          >
+          <a href="categories.html" class="admin-nav-item"
+            ><span class="admin-nav-icon"></span> Quản lý danh mục</a
+          >
+          <a href="admin-orders.html" class="admin-nav-item"
+            ><span class="admin-nav-icon"></span> Quản lý đơn hàng</a
+          >
+          <a href="user.html" class="admin-nav-item"
+            ><span class="admin-nav-icon"></span> Quản lý tài khoản</a
+          >
+          <div class="admin-nav-section">Hệ thống</div>
+          <a href="index.html" class="admin-nav-item"
+            ><span class="admin-nav-icon"></span> Về trang chủ</a
+          >
+          <button
+            class="admin-nav-item"
+            onclick="Auth.logout()"
+            style="color: #ff6b6b"
+          >
+            <span class="admin-nav-icon"></span> Đăng xuất
+          </button>
+        </nav>
+        <div class="admin-user-footer">
+          <div class="admin-user-avatar">A</div>
+          <div class="admin-user-info">
+            <div class="name">Admin</div>
+            <div class="role">Quản trị viên</div>
+          </div>
+        </div>
+      </aside>
+
+      <main class="admin-content">
+        <div class="admin-header">
+          <div class="admin-page-title">Quản lý sách</div>
+          <button
+            class="btn-primary"
+            style="padding: 10px 20px; font-size: 13px"
+            onclick="openBookModal()"
+          >
+            + Thêm sách
+          </button>
+        </div>
+
+        <div class="admin-card">
+          <div class="admin-card-header">
+            <div class="admin-card-title">
+              Danh sách sách (<span id="bookCount">0</span>)
+            </div>
+            <div style="display: flex; gap: 8px; align-items: center">
+              <select
+                class="search-admin"
+                id="filterCat"
+                onchange="applyFilters()"
+                style="min-width: 150px"
+              >
+                <option value="">Tất cả danh mục</option>
+              </select>
+              <input
+                type="text"
+                class="search-admin"
+                placeholder="🔍 Tìm kiếm sách..."
+                id="searchBooks"
+                oninput="applyFilters()"
+              />
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>#ID</th>
+                  <th>Bìa sách</th>
+                  <th>Tên sách</th>
+                  <th>Tác giả</th>
+                  <th>Danh mục</th>
+                  <th>Giá bán</th>
+                  <th>Tồn kho</th>
+                  <th>Đánh giá</th>
+                  <th>Thao tác</th>
+                </tr>
+              </thead>
+              <tbody id="booksTableBody">
+                <tr>
+                  <td
+                    colspan="9"
+                    style="
+                      text-align: center;
+                      padding: 40px;
+                      color: var(--ink-muted);
+                    "
+                  >
+                    Đang tải...
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <!-- MODAL THÊM / SỬA SÁCH -->
+    <div class="modal-overlay hidden" id="bookModal">
+      <div class="modal" style="max-width: 700px">
+        <div class="modal-header">
+          <div class="modal-title" id="bookModalTitle">Thêm sách</div>
+          <button class="modal-close" onclick="adminModal('bookModal', false)">
+            ✕
+          </button>
+        </div>
+        <div class="modal-body">
+          <input type="hidden" id="bookId" />
+
+          <div class="form-row">
+            <div class="form-group" style="flex: 2">
+              <label class="form-label">Tên sách *</label>
+              <input
+                type="text"
+                class="form-input"
+                id="bookTitle"
+                placeholder="Tên sách..."
+              />
+            </div>
+            <div class="form-group" style="flex: 1">
+              <label class="form-label">Danh mục *</label>
+              <select
+                class="form-input"
+                id="bookCat"
+                style="cursor: pointer"
+              ></select>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Tác giả *</label>
+              <input
+                type="text"
+                class="form-input"
+                id="bookAuthor"
+                placeholder="Tên tác giả..."
+              />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Link ảnh bìa</label>
+              <input
+                type="text"
+                class="form-input"
+                id="bookImage"
+                placeholder="images/ten-sach.jpg"
+                oninput="previewImg()"
+              />
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Giá bán (₫) *</label>
+              <input
+                type="number"
+                class="form-input"
+                id="bookPrice"
+                placeholder="85000"
+                min="0"
+              />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Giá gốc (₫)</label>
+              <input
+                type="number"
+                class="form-input"
+                id="bookOriginalPrice"
+                placeholder="120000 (để trống nếu không KM)"
+                min="0"
+              />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Tồn kho *</label>
+              <input
+                type="number"
+                class="form-input"
+                id="bookStock"
+                placeholder="50"
+                min="0"
+              />
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Đánh giá (1-5)</label>
+              <input
+                type="number"
+                class="form-input"
+                id="bookRating"
+                placeholder="4.5"
+                min="1"
+                max="5"
+                step="0.1"
+              />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Số lượt đánh giá</label>
+              <input
+                type="number"
+                class="form-input"
+                id="bookReviews"
+                placeholder="0"
+                min="0"
+              />
+            </div>
+            <div
+              class="form-group"
+              style="
+                display: flex;
+                align-items: flex-end;
+                gap: 8px;
+                padding-bottom: 2px;
+              "
+            >
+              <label
+                style="
+                  display: flex;
+                  align-items: center;
+                  gap: 8px;
+                  cursor: pointer;
+                  font-size: 14px;
+                  font-weight: 500;
+                "
+              >
+                <input
+                  type="checkbox"
+                  id="bookFeatured"
+                  style="width: 16px; height: 16px; accent-color: var(--amber)"
+                />
+                Sách nổi bật
+              </label>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Mô tả</label>
+            <textarea
+              class="form-input"
+              id="bookDesc"
+              rows="3"
+              placeholder="Mô tả ngắn về sách..."
+              style="resize: vertical"
+            ></textarea>
+          </div>
+
+          <!-- Preview ảnh -->
+          <div id="imgPreviewWrap" style="display: none; margin-bottom: 12px">
+            <label class="form-label">Xem trước ảnh bìa</label>
+            <img
+              id="imgPreview"
+              src=""
+              alt="preview"
+              style="
+                height: 120px;
+                border-radius: 8px;
+                border: 1px solid var(--border);
+                object-fit: cover;
+              "
+              onerror="this.style.display = 'none'"
+            />
+          </div>
+
+          <div style="display: flex; gap: 12px; margin-top: 8px">
+            <button class="form-submit" onclick="saveBook()" style="flex: 1">
+              Lưu
+            </button>
+            <button
+              class="btn-secondary"
+              onclick="adminModal('bookModal', false)"
+              style="flex: 1; color: var(--ink); border-color: var(--border)"
+            >
+              Hủy
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="main.js"></script>
+    <script src="admin.js"></script>
+    <script>
+      let allBooks = [];
+      let allCats = [];
+
+      async function loadBooks() {
+        if (!AdminAuth.check()) return;
+        const user = Auth.getUser();
+        document.querySelector(".admin-user-avatar").textContent = user.name
+          .charAt(0)
+          .toUpperCase();
+        document.querySelector(".admin-user-info .name").textContent =
+          user.name;
+
+        try {
+          [allBooks, allCats] = await Promise.all([
+            api.get("/books"),
+            api.get("/categories"),
+          ]);
+
+          // Populate category filter
+          document.getElementById("filterCat").innerHTML =
+            '<option value="">Tất cả danh mục</option>' +
+            allCats
+              .map(
+                (c) => `<option value="${c.id}">${c.icon} ${c.name}</option>`,
+              )
+              .join("");
+
+          // Populate category select in modal
+          document.getElementById("bookCat").innerHTML = allCats
+            .map((c) => `<option value="${c.id}">${c.icon} ${c.name}</option>`)
+            .join("");
+
+          renderBooks(allBooks);
+        } catch {
+          Toast.show("Không thể tải dữ liệu", "error");
+        }
+      }
+
+      function renderBooks(books) {
+        document.getElementById("bookCount").textContent = books.length;
+        const body = document.getElementById("booksTableBody");
+        if (!books.length) {
+          body.innerHTML =
+            '<tr><td colspan="9" style="text-align:center;padding:40px;color:var(--ink-muted)">Không có sách nào</td></tr>';
+          return;
+        }
+        body.innerHTML = books
+          .map((b) => {
+            const cat = allCats.find(
+              (c) => String(c.id) === String(b.categoryId),
+            );
+            const discount =
+              b.originalPrice && b.originalPrice > b.price
+                ? Math.round((1 - b.price / b.originalPrice) * 100)
+                : null;
+            return `<tr>
+            <td><strong>#${b.id}</strong></td>
+            <td>
+              <img src="${b.image}" alt="${b.title}"
+                style="width:44px;height:60px;object-fit:cover;border-radius:4px;border:1px solid var(--border)"
+                onerror="this.src='https://via.placeholder.com/44x60?text=📚'" />
+            </td>
+            <td>
+              <div style="font-weight:600;max-width:180px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${b.title}</div>
+              ${b.featured ? '<span style="font-size:11px;background:var(--amber-pale);color:var(--amber);padding:2px 8px;border-radius:50px;font-weight:600">⭐ Nổi bật</span>' : ""}
+              ${discount ? `<span style="font-size:11px;background:#fff0f0;color:var(--rust);padding:2px 8px;border-radius:50px;font-weight:600;margin-left:4px">-${discount}%</span>` : ""}
+            </td>
+            <td style="color:var(--ink-muted)">${b.author}</td>
+            <td><span style="background:var(--amber-pale);color:var(--amber);padding:3px 10px;border-radius:50px;font-size:12px;font-weight:600">${cat ? cat.name : "—"}</span></td>
+            <td style="color:var(--rust);font-weight:700">${fmt.price(b.price)}</td>
+            <td>
+              <span style="color:${b.stock > 10 ? "var(--sage)" : b.stock > 0 ? "var(--amber)" : "var(--rust)"};font-weight:600">
+                ${b.stock > 0 ? b.stock : "Hết hàng"}
+              </span>
+            </td>
+            <td> ${b.rating || "—"} <span style="color:var(--ink-muted);font-size:12px">(${b.reviews || 0})</span></td>
+            <td>
+              <div style="display:flex;gap:6px">
+                <button class="icon-btn" onclick="editBook('${b.id}')" title="Sửa">✏️</button>
+                <button class="icon-btn danger" onclick="deleteBook('${b.id}')" title="Xóa">🗑️</button>
+              </div>
+            </td>
+          </tr>`;
+          })
+          .join("");
+      }
+
+      function applyFilters() {
+        const q = document.getElementById("searchBooks").value.toLowerCase();
+        const catId = document.getElementById("filterCat").value;
+        let filtered = allBooks;
+        if (catId)
+          filtered = filtered.filter(
+            (b) => String(b.categoryId) === String(catId),
+          );
+        if (q)
+          filtered = filtered.filter(
+            (b) =>
+              b.title.toLowerCase().includes(q) ||
+              b.author.toLowerCase().includes(q),
+          );
+        renderBooks(filtered);
+      }
+
+      function previewImg() {
+        const src = document.getElementById("bookImage").value.trim();
+        const wrap = document.getElementById("imgPreviewWrap");
+        const img = document.getElementById("imgPreview");
+        if (src) {
+          wrap.style.display = "block";
+          img.style.display = "block";
+          img.src = src;
+        } else {
+          wrap.style.display = "none";
+        }
+      }
+
+      function openBookModal() {
+        document.getElementById("bookId").value = "";
+        document.getElementById("bookTitle").value = "";
+        document.getElementById("bookAuthor").value = "";
+        document.getElementById("bookImage").value = "";
+        document.getElementById("bookPrice").value = "";
+        document.getElementById("bookOriginalPrice").value = "";
+        document.getElementById("bookStock").value = "";
+        document.getElementById("bookRating").value = "";
+        document.getElementById("bookReviews").value = "";
+        document.getElementById("bookDesc").value = "";
+        document.getElementById("bookFeatured").checked = false;
+        document.getElementById("imgPreviewWrap").style.display = "none";
+        if (allCats.length)
+          document.getElementById("bookCat").value = allCats[0].id;
+        document.getElementById("bookModalTitle").textContent = "Thêm sách";
+        adminModal("bookModal", true);
+      }
+
+      function editBook(id) {
+        const b = allBooks.find((x) => String(x.id) === String(id));
+        if (!b) return;
+        document.getElementById("bookId").value = b.id;
+        document.getElementById("bookTitle").value = b.title;
+        document.getElementById("bookAuthor").value = b.author;
+        document.getElementById("bookImage").value = b.image || "";
+        document.getElementById("bookPrice").value = b.price;
+        document.getElementById("bookOriginalPrice").value =
+          b.originalPrice || "";
+        document.getElementById("bookStock").value = b.stock;
+        document.getElementById("bookRating").value = b.rating || "";
+        document.getElementById("bookReviews").value = b.reviews || 0;
+        document.getElementById("bookDesc").value = b.description || "";
+        document.getElementById("bookFeatured").checked = !!b.featured;
+        document.getElementById("bookCat").value = b.categoryId;
+        previewImg();
+        document.getElementById("bookModalTitle").textContent = "Sửa sách";
+        adminModal("bookModal", true);
+      }
+
+      async function saveBook() {
+        const id = document.getElementById("bookId").value;
+        const title = document.getElementById("bookTitle").value.trim();
+        const author = document.getElementById("bookAuthor").value.trim();
+        const price = parseFloat(document.getElementById("bookPrice").value);
+        const stock = parseInt(document.getElementById("bookStock").value);
+
+        if (!title || !author || isNaN(price) || isNaN(stock)) {
+          return Toast.show(
+            "Vui lòng điền đầy đủ các trường bắt buộc (*)",
+            "error",
+          );
+        }
+
+        const origPrice =
+          parseFloat(document.getElementById("bookOriginalPrice").value) ||
+          null;
+
+        const data = {
+          title,
+          author,
+          image:
+            document.getElementById("bookImage").value.trim() ||
+            "images/placeholder.jpg",
+          price,
+          originalPrice: origPrice && origPrice > price ? origPrice : null,
+          stock,
+          categoryId: document.getElementById("bookCat").value,
+          rating:
+            parseFloat(document.getElementById("bookRating").value) || 4.5,
+          reviews: parseInt(document.getElementById("bookReviews").value) || 0,
+          description: document.getElementById("bookDesc").value.trim(),
+          featured: document.getElementById("bookFeatured").checked,
+        };
+
+        try {
+          if (id) {
+            await api.put(`/books/${id}`, { id, ...data });
+            Toast.show("Cập nhật sách thành công! ✅", "success");
+          } else {
+            await api.post("/books", data);
+            Toast.show("Thêm sách thành công! ✅", "success");
+          }
+          adminModal("bookModal", false);
+          loadBooks();
+        } catch {
+          Toast.show("Lỗi lưu dữ liệu", "error");
+        }
+      }
+
+      async function deleteBook(id) {
+        const b = allBooks.find((x) => String(x.id) === String(id));
+        if (!confirmDelete(`Xóa sách "${b?.title}"?`)) return;
+        try {
+          await api.delete(`/books/${id}`);
+          Toast.show("Đã xóa sách!", "success");
+          loadBooks();
+        } catch {
+          Toast.show("Lỗi xóa dữ liệu", "error");
+        }
+      }
+
+      document.addEventListener("DOMContentLoaded", () => {
+        document.getElementById("bookModal").addEventListener("click", (e) => {
+          if (e.target === document.getElementById("bookModal"))
+            adminModal("bookModal", false);
+        });
+      });
+
+      loadBooks();
+    </script>
+  </body>
+</html>

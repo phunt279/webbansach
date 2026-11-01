@@ -1,0 +1,277 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quản lý đơn hàng - Admin PAT</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="admin.css" />
+  </head>
+  <body>
+    <div class="admin-layout">
+      <aside class="admin-sidebar">
+        <div class="admin-logo">
+          <a
+            href="admin-dashboard.html"
+            style="
+              text-decoration: none;
+              display: flex;
+              align-items: center;
+              gap: 10px;
+            "
+          >
+            <div
+              class="logo-icon"
+              style="width: 36px; height: 36px; font-size: 18px"
+            ></div>
+            <div>
+              <div class="logo-text" style="font-size: 18px">PAT</div>
+              <div
+                style="
+                  font-size: 10px;
+                  color: rgba(255, 255, 255, 0.4);
+                  letter-spacing: 1px;
+                "
+              >
+                ADMIN PANEL
+              </div>
+            </div>
+          </a>
+        </div>
+        <nav class="admin-nav">
+          <div class="admin-nav-section">Tổng quan</div>
+          <a href="admin-dashboard.html" class="admin-nav-item"
+            ><span class="admin-nav-icon"></span> Dashboard</a
+          >
+          <div class="admin-nav-section">Quản lý</div>
+          <a href="admin-books.html" class="admin-nav-item">
+            <span class="admin-nav-icon"></span> Quản lý sách</a
+          >
+          <a href="categories.html" class="admin-nav-item"
+            ><span class="admin-nav-icon"></span> Quản lý danh mục</a
+          >
+          <a href="orders.html" class="admin-nav-item active"
+            ><span class="admin-nav-icon"></span> Quản lý đơn hàng</a
+          >
+          <a href="user.html" class="admin-nav-item"
+            ><span class="admin-nav-icon"></span> Quản lý tài khoản</a
+          >
+          <div class="admin-nav-section">Hệ thống</div>
+          <a href="index.html" class="admin-nav-item"
+            ><span class="admin-nav-icon"></span> Về trang chủ</a
+          >
+          <button
+            class="admin-nav-item"
+            onclick="Auth.logout()"
+            style="color: #ff6b6b"
+          >
+            <span class="admin-nav-icon"></span> Đăng xuất
+          </button>
+        </nav>
+        <div class="admin-user-footer">
+          <div class="admin-user-avatar">A</div>
+          <div class="admin-user-info">
+            <div class="name">Admin</div>
+            <div class="role">Quản trị viên</div>
+          </div>
+        </div>
+      </aside>
+
+      <main class="admin-content">
+        <div class="admin-header">
+          <div class="admin-page-title">Quản lý đơn hàng</div>
+          <div style="display: flex; gap: 8px">
+            <button
+              class="filter-btn active"
+              onclick="filterOrders('all', this)"
+            >
+              Tất cả
+            </button>
+            <button class="filter-btn" onclick="filterOrders('pending', this)">
+              Chờ xử lý
+            </button>
+            <button
+              class="filter-btn"
+              onclick="filterOrders('processing', this)"
+            >
+              Đang giao
+            </button>
+            <button
+              class="filter-btn"
+              onclick="filterOrders('delivered', this)"
+            >
+              Đã giao
+            </button>
+            <button
+              class="filter-btn"
+              onclick="filterOrders('cancelled', this)"
+            >
+              Đã hủy
+            </button>
+          </div>
+        </div>
+
+        <div class="admin-card">
+          <div class="admin-card-header">
+            <div class="admin-card-title">
+              Danh sách đơn hàng (<span id="orderCount">0</span>)
+            </div>
+            <input
+              type="text"
+              class="search-admin"
+              placeholder="Tìm tên, địa chỉ..."
+              id="searchOrders"
+              oninput="filterSearch()"
+            />
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>#ID</th>
+                  <th>Khách hàng</th>
+                  <th>Điện thoại</th>
+                  <th>Sản phẩm</th>
+                  <th>Tổng tiền</th>
+                  <th>Ngày đặt</th>
+                  <th>Trạng thái</th>
+                  <th>Cập nhật</th>
+                </tr>
+              </thead>
+              <tbody id="ordersTableBody">
+                <tr>
+                  <td
+                    colspan="8"
+                    style="
+                      text-align: center;
+                      padding: 40px;
+                      color: var(--ink-muted);
+                    "
+                  >
+                    Đang tải...
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <script src="main.js"></script>
+    <script src="admin.js"></script>
+    <script>
+      let allOrders = [];
+      let currentFilter = "all";
+
+      const statusMap = {
+        pending: { label: "Chờ xử lý", cls: "status-pending" },
+        processing: { label: "Đang giao", cls: "status-processing" },
+        delivered: { label: "Đã giao", cls: "status-delivered" },
+        cancelled: { label: "Đã hủy", cls: "status-cancelled" },
+      };
+
+      async function loadOrders() {
+        if (!AdminAuth.check()) return;
+        const user = Auth.getUser();
+        document.querySelector(".admin-user-avatar").textContent = user.name
+          .charAt(0)
+          .toUpperCase();
+        document.querySelector(".admin-user-info .name").textContent =
+          user.name;
+
+        try {
+          allOrders = await api.get("/orders");
+          allOrders.sort(
+            (a, b) => new Date(b.createdAt) - new Date(a.createdAt),
+          );
+          renderOrders(allOrders);
+        } catch {
+          Toast.show("Không thể tải đơn hàng", "error");
+        }
+      }
+
+      function renderOrders(orders) {
+        document.getElementById("orderCount").textContent = orders.length;
+        const body = document.getElementById("ordersTableBody");
+        if (!orders.length) {
+          body.innerHTML =
+            '<tr><td colspan="8" style="text-align:center;padding:40px;color:var(--ink-muted)">Không có đơn hàng nào</td></tr>';
+          return;
+        }
+        body.innerHTML = orders
+          .map((o) => {
+            const st = statusMap[o.status] || statusMap.pending;
+            const itemsSummary = (o.items || [])
+              .map((i) => `${i.quantity} cuốn`)
+              .join(", ");
+            return `<tr>
+            <td><strong>#${o.id}</strong></td>
+            <td>
+              <div style="font-weight:600">${o.name || "Khách hàng"}</div>
+              <div style="font-size:12px;color:var(--ink-muted)">${o.email || ""}</div>
+            </td>
+            <td>${o.phone || "—"}</td>
+            <td style="color:var(--ink-muted);font-size:13px">${itemsSummary || "—"}</td>
+            <td style="color:var(--rust);font-weight:700">${fmt.price(o.total)}</td>
+            <td style="color:var(--ink-muted)">${o.createdAt || "—"}</td>
+            <td><span class="order-status ${st.cls}">${st.label}</span></td>
+            <td>
+              <select class="sort-select" style="padding:6px 10px;font-size:12px" onchange="updateStatus('${o.id}', this.value)">
+                <option value="pending"    ${o.status === "pending" ? "selected" : ""}>⏳ Chờ xử lý</option>
+                <option value="processing" ${o.status === "processing" ? "selected" : ""}>🚚 Đang giao</option>
+                <option value="delivered"  ${o.status === "delivered" ? "selected" : ""}>✅ Đã giao</option>
+                <option value="cancelled"  ${o.status === "cancelled" ? "selected" : ""}>❌ Đã hủy</option>
+              </select>
+            </td>
+          </tr>`;
+          })
+          .join("");
+      }
+
+      function filterOrders(status, btn) {
+        currentFilter = status;
+        document
+          .querySelectorAll(".filter-btn")
+          .forEach((b) => b.classList.remove("active"));
+        btn.classList.add("active");
+        applyFilters();
+      }
+
+      function filterSearch() {
+        applyFilters();
+      }
+
+      function applyFilters() {
+        const q = document.getElementById("searchOrders").value.toLowerCase();
+        let filtered = allOrders;
+        if (currentFilter !== "all")
+          filtered = filtered.filter((o) => o.status === currentFilter);
+        if (q)
+          filtered = filtered.filter(
+            (o) =>
+              (o.name || "").toLowerCase().includes(q) ||
+              (o.address || "").toLowerCase().includes(q) ||
+              String(o.id).includes(q),
+          );
+        renderOrders(filtered);
+      }
+
+      async function updateStatus(orderId, newStatus) {
+        try {
+          await api.patch(`/orders/${orderId}`, { status: newStatus });
+          const idx = allOrders.findIndex(
+            (o) => String(o.id) === String(orderId),
+          );
+          if (idx >= 0) allOrders[idx].status = newStatus;
+          Toast.show("Cập nhật trạng thái thành công! ✅", "success");
+          applyFilters();
+        } catch {
+          Toast.show("Lỗi cập nhật trạng thái", "error");
+        }
+      }
+
+      loadOrders();
+    </script>
+  </body>
+</html>
